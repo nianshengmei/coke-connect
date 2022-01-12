@@ -10,12 +10,7 @@
     <version>0.0.1-start</version>
 
     <description>一款可以轻松帮你实现网络通讯的java组件</description>
-    <modules>
-        <module>connect-common</module>
-        <module>connect-client</module>
-        <module>connect-server</module>
-        <module>coke-connect-all</module>
-    </modules>
+
 
     <properties>
         <lombok-version>1.18.20</lombok-version>
