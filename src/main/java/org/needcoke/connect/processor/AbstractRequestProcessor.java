@@ -1,10 +1,12 @@
 package org.needcoke.connect.processor;
 
+import io.netty.channel.ChannelHandlerContext;
 import org.needcoke.connect.advice.Advice;
+import org.needcoke.connect.protocol.CokeRequest;
 
 import java.util.List;
 
-public abstract class AbstractRequestProcessor {
+public abstract class AbstractRequestProcessor implements IRequestProcessor{
 
     /* first advice */
     protected Advice firstAdvice;
@@ -24,5 +26,6 @@ public abstract class AbstractRequestProcessor {
         if (null != lastAdvice) lastAdvice.handle();
     }
 
-
+    @Override
+    public abstract void handle(ChannelHandlerContext ctx, CokeRequest cokeRequest);
 }

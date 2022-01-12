@@ -7,13 +7,46 @@
     <groupId>org.needcoke</groupId>
     <artifactId>coke-connect</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.1-start</version>
+    <version>V1.0</version>
 
     <description>一款可以轻松帮你实现网络通讯的java组件</description>
 
 
     <properties>
         <lombok-version>1.18.20</lombok-version>
+        <netty-version>4.1.70.Final</netty-version>
+        <log4j2-version>2.15.0</log4j2-version>
+        <fastjson-version>1.2.38</fastjson-version>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>${netty-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j2-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>${log4j2-version}</version>
+        </dependency>
+    </dependencies>
     
 </project>
