@@ -7,9 +7,12 @@
     <groupId>org.needcoke</groupId>
     <artifactId>coke-connect</artifactId>
     <packaging>pom</packaging>
-    <version>V1.0</version>
+    <version>version-1.0</version>
 
     <description>一款可以轻松帮你实现网络通讯的java组件</description>
+    <modules>
+        <module>core</module>
+    </modules>
 
 
     <properties>
