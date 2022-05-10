@@ -1,0 +1,11 @@
+
+spring:
+  application:
+    name: bussiness-a
+  # nacos默认可以不写  但是 如果不是默认的必须要写
+  cloud:
+    nacos:
+      #注册中心
+      discovery:
+        #server-addr: http://192.168.*:8848
+        server-addr: http://127.0.0.1:9951

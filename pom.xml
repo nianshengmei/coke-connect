@@ -7,11 +7,16 @@
     <groupId>org.needcoke</groupId>
     <artifactId>coke-connect</artifactId>
     <packaging>pom</packaging>
-    <version>version-1.0</version>
+    <version>abandon</version>
 
-    <description>一款可以轻松帮你实现网络通讯的java组件</description>
+    <description>abandon这个单词是词汇表的第一单词,coke-connect用于作为初始版本</description>
     <modules>
-
+        <module>common</module>
+        <module>register-nacos</module>
+        <module>register-eureka</module>
+        <module>bussiness-a</module>
+        <module>business-b</module>
+        <module>business-c</module>
     </modules>
 
 
@@ -20,6 +25,8 @@
         <netty-version>4.1.70.Final</netty-version>
         <log4j2-version>2.15.0</log4j2-version>
         <fastjson-version>1.2.38</fastjson-version>
+        <spring-cloud-version>Hoxton.SR12</spring-cloud-version>
+        <hutool-version>5.7.16</hutool-version>
     </properties>
 
 
