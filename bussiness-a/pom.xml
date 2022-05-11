@@ -18,51 +18,10 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>2.3.2.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-            <version>2.2.5.RC1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok-version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
-            <version>2.2.5.RELEASE</version>
+            <groupId>org.needcoke</groupId>
+            <artifactId>common</artifactId>
+            <version>abandon</version>
         </dependency>
     </dependencies>
-
-    <dependencyManagement>
-<dependencies>
-
-    <!--微服务 版本依赖关系 (相互对应_官方)-->
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-dependencies</artifactId>
-        <version>2.3.2.RELEASE</version>
-        <type>pom</type>
-        <scope>import</scope><!--引入三方依赖版本的设计-->
-    </dependency>
-    <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-dependencies</artifactId>
-        <version>2.2.5.RELEASE</version>
-    </dependency>
-
-    <dependency>
-        <groupId>com.alibaba.cloud</groupId>
-        <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-        <version>2.2.5.RC1</version>
-    </dependency>
-</dependencies>
-    </dependencyManagement>
 
 </project>

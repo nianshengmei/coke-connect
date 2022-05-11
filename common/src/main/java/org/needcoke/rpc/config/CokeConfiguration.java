@@ -1,6 +1,8 @@
-package org.needcoke.a.configuration;
+package org.needcoke.rpc.config;
 
+import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import java.lang.reflect.Method;
@@ -8,11 +10,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author yanming
- * @date 2022/5/11
+ * @author Gilgamesh
+ * @date 2022/4/2
  */
 @Configuration
-public class MethodCoreConfig {
+public class CokeConfiguration {
 
     /**
      * ${beanName}#${methodName} -> method
