@@ -16,7 +16,6 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -54,10 +53,8 @@ public class ConnectUtil {
                                  String methodName,
                                  Map<String, Object> params) {
         List<ServiceInstance> instances = discoveryClient.getInstances(serviceId);
-        List<ServiceInstance> instanceList = choose(instances);
-        HttpResult result = null;
-        for (ServiceInstance instance : instanceList) {
-             result = HTTP.builder().addMsgConvertor(new JacksonMsgConvertor()).build()
+        ServiceInstance instance = choose(instances);
+        HttpResult result = HTTP.builder().addMsgConvertor(new JacksonMsgConvertor()).build()
                     .sync(instance.getUri() + ConnectConstant.EXECUTE_RELATIVE_PATH)
                     .bodyType(HttpContentType.JSON.getValue())
                     .addBodyPara(params)
@@ -65,8 +62,6 @@ public class ConnectUtil {
                     .addUrlPara(ConnectConstant.METHOD_NAME, methodName)
                     .post();
             handleResult(serviceId, beanName, methodName, params, result);
-        }
-        assert result != null;
         return result.getBody().toString();
     }
 
@@ -78,11 +73,9 @@ public class ConnectUtil {
      * @param instances 从注册中心获取的实例列表
      * @return 某一个特定的实例
      */
-    public static List<ServiceInstance> choose(List<ServiceInstance> instances) {
+    public static ServiceInstance choose(List<ServiceInstance> instances) {
         if (CollUtil.isNotEmpty(instances)) {
-            List<ServiceInstance> instanceList = new ArrayList<>();
-            instanceList.add(instances.get(0));
-            return instanceList;
+            return instances.get(0);
         }
         throw new CokeConnectException(ConnectionExceptionEnum.CAN_NOT_FIND_SUCH_INSTANCE);
     }
