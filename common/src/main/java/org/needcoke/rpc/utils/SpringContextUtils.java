@@ -1,11 +1,15 @@
 package org.needcoke.rpc.utils;
 
+import org.needcoke.rpc.common.constant.ConnectionExceptionEnum;
+import org.needcoke.rpc.common.exception.CokeConnectException;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Syntax;
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -39,8 +43,13 @@ public class SpringContextUtils {
         beanNameMethodMap = bnmm;
         classNameMethodMap = cnmm;
     }
-    public static <T> T getBean(String beanName){
-        return (T)context.getBean(beanName);
+
+    public static <T> T getBean(String beanName) {
+        try {
+            return (T) context.getBean(beanName);
+        }catch (NoSuchBeanDefinitionException exception){
+            throw new CokeConnectException(ConnectionExceptionEnum.NO_SUCH_BEAN_NAME);
+        }
     }
 
     public static <T> T getBean(Class<T> clz){
