@@ -1,5 +1,6 @@
 package org.needcoke.b.component;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -9,7 +10,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class TestComponent {
 
+    private RpcClient client;
+
+    @Autowired
+    public void setClient(RpcClient client) {
+        this.client = client;
+    }
+
     public Object gg(String nm){
-        return "cao "+ nm;
+        return "cao "+ client.vvd();
     }
 }

@@ -6,13 +6,13 @@ package org.needcoke.rpc.common.constant;
  * @author yanming
  * @date 2022/5/12
  */
-public enum HttpContentType {
+public enum HttpContentTypeEnum {
 
     JSON("json");
 
     private final String value;
 
-    HttpContentType(String value) {
+    HttpContentTypeEnum(String value) {
         this.value = value;
     }
 

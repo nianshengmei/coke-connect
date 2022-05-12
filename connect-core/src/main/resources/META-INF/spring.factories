@@ -1,2 +1,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
    org.needcoke.rpc.config.CokeConnectContextInitializer
+
+org.springframework.context.annotation.ImportBeanDefinitionRegistrar=\
+  org.needcoke.rpc.config.RpcEnhanceRegister  

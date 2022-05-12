@@ -11,5 +11,6 @@ spring:
         server-addr: http://127.0.0.1:8848
         cluster-name: 严鸣是吕诗文爸爸
         group: 相亲相爱一家人
+        access-key:
 server:
-  port: 8080
+  port: 8000

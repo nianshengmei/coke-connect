@@ -22,20 +22,35 @@ public class SpringContextUtils {
 
 
     private static ApplicationContext context;
-    @Autowired
+
     private ApplicationContext ctx;
 
 
     private static Map<String, Method> beanNameMethodMap;
-    @Autowired
-    @Qualifier(value = "beanNameMethodMap")
+
     private Map<String, Method> bnmm;
 
     private static Map<String, Method> classNameMethodMap;
 
-    @Qualifier(value = "classNameMethodMap")
-    @Autowired
+
     private Map<String, Method> cnmm;
+
+    @Autowired
+    public ApplicationContext getCtx() {
+        return ctx;
+    }
+
+    @Autowired
+    @Qualifier(value = "beanNameMethodMap")
+    public Map<String, Method> getBnmm() {
+        return bnmm;
+    }
+
+    @Autowired
+    @Qualifier(value = "classNameMethodMap")
+    public Map<String, Method> getCnmm() {
+        return cnmm;
+    }
 
     @PostConstruct
     public void init(){
