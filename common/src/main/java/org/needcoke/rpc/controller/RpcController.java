@@ -22,8 +22,8 @@ public class RpcController {
                           @RequestBody Map<String, Object> params) {
         Method method = SpringContextUtils.getMethod(beanName, methodName);
         Object bean = SpringContextUtils.getBean(beanName);
+        Collection<Object> values = params.values();
         try {
-            Collection<Object> values = params.values();
             return method.invoke(bean, values.toArray());
         } catch (Exception e) {
             e.printStackTrace();

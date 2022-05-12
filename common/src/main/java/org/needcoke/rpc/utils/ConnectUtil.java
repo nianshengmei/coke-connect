@@ -1,8 +1,16 @@
 package org.needcoke.rpc.utils;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.http.ContentType;
+import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.ejlchina.okhttps.HTTP;
+import com.ejlchina.okhttps.HttpResult;
+import com.ejlchina.okhttps.HttpUtils;
+import com.ejlchina.okhttps.SHttpTask;
+import com.ejlchina.okhttps.jackson.JacksonMsgConvertor;
 import lombok.experimental.Accessors;
+import org.smartboot.http.client.BodyStream;
 import org.smartboot.http.client.HttpClient;
 import org.smartboot.http.client.HttpGet;
 import org.smartboot.http.client.HttpPost;
@@ -10,8 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,6 +36,8 @@ public class ConnectUtil {
     @Autowired
     private DiscoveryClient dc;
 
+    private static RestTemplate rt = new RestTemplate();
+
     private static DiscoveryClient discoveryClient;
 
     @PostConstruct
@@ -38,18 +50,15 @@ public class ConnectUtil {
                    Map<String, Object> params){
         List<ServiceInstance> instances = discoveryClient.getInstances(serviceId);
         ServiceInstance instance = choose(instances);
-        HttpClient httpClient = new HttpClient(instance.getHost(), instance.getPort());
-        httpClient.connect();
-       httpClient.post("/coke/connect/execute")
-        .addQueryParam("beanName",beanName)
-        .addQueryParam("methodName",methodName)
-                .addQueryParam("params",JSONObject.toJSONString(params))
-        .onSuccess(response -> {
-                    response.body();
-                })
-                .onFailure(throwable -> throwable.printStackTrace())
-                .send();
-        return null;
+
+        HttpResult result = HTTP.builder().addMsgConvertor(new JacksonMsgConvertor()).build()
+                .sync(instance.getUri() + "/coke/connect/execute")
+                .bodyType("json")
+                .addBodyPara(params)
+                .addUrlPara("beanName", beanName)
+                .addUrlPara("methodName", methodName)
+                .post();
+        return result.getBody().toString();
     }
 
     public static ServiceInstance choose(List<ServiceInstance> instances){

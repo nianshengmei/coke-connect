@@ -22,3 +22,6 @@ bin-release/
 */.gitignore
 .idea
 .idea/*
+
+*/target/*
+*/target
