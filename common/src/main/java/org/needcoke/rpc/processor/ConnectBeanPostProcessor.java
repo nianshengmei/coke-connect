@@ -11,6 +11,8 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
+ * CokeConnect处理器，用于扩展Call接口
+ *
  * @author yanming
  * @date 2022/5/12
  */
@@ -30,11 +32,11 @@ public class ConnectBeanPostProcessor implements BeanPostProcessor {
         for (Method method : methods) {
             String methodName = method.getName();
             Call call = method.getAnnotation(Call.class);
-            if(null != call && StrUtil.isNotEmpty(call.value())){
+            if (null != call && StrUtil.isNotEmpty(call.value())) {
                 methodName = call.value();
             }
-            beanNameMethodMap.put(beanName+"#"+methodName,method);
-            classNameMethodMap.put(clz.getName()+"#"+methodName,method);
+            beanNameMethodMap.put(beanName + "#" + methodName, method);
+            classNameMethodMap.put(clz.getName() + "#" + methodName, method);
         }
         return BeanPostProcessor.super.postProcessBeforeInitialization(bean, beanName);
     }
