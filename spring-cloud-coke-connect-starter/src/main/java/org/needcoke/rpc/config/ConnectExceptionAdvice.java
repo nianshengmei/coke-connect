@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 全局异常处理
+ *
  * @author yanming
  * @date 2022/5/12
  */
@@ -15,11 +17,11 @@ import java.util.Map;
 public class ConnectExceptionAdvice {
 
     @ExceptionHandler(value = CokeConnectException.class)
-    public Map<String,String> exceptionHandle(CokeConnectException exception){
-        Map<String,String> ret = new HashMap<>();
-        ret.put("message",exception.getMessage());
-        ret.put("note",exception.getNote());
-        ret.put("errorCode",exception.getErrorCode());
+    public Map<String, String> exceptionHandle(CokeConnectException exception) {
+        Map<String, String> ret = new HashMap<>();
+        ret.put("message", exception.getMessage());
+        ret.put("note", exception.getNote());
+        ret.put("errorCode", exception.getErrorCode());
         return ret;
     }
 }
