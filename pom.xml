@@ -11,7 +11,7 @@
 
     <description>abandon这个单词是词汇表的第一单词,coke-connect用于作为初始版本</description>
     <modules>
-        <module>common</module>
+        <module>spring-cloud-coke-connect-starter</module>
         <module>register-nacos</module>
         <module>register-eureka</module>
         <module>bussiness-a</module>

@@ -18,7 +18,7 @@
     <dependencies>
         <dependency>
             <groupId>org.needcoke</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>spring-cloud-coke-connect-starter</artifactId>
             <version>abandon</version>
         </dependency>
     </dependencies>
