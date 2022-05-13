@@ -7,7 +7,7 @@ import com.ejlchina.okhttps.jackson.JacksonMsgConvertor;
 import lombok.extern.slf4j.Slf4j;
 import org.needcoke.rpc.common.constant.ConnectConstant;
 import org.needcoke.rpc.common.constant.HttpContentTypeEnum;
-import org.needcoke.rpc.loadBalance.LoadBalance;
+import org.needcoke.rpc.config.LoadBalance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -33,19 +33,9 @@ public class ConnectUtil {
 
     private static DiscoveryClient discoveryClient;
 
-    private static LoadBalance loadBalance;
-
     @PostConstruct
     public void init() {
         discoveryClient = dc;
-        loadBalance = lb;
-    }
-
-    private LoadBalance lb;
-
-    @Autowired
-    public void setLb(LoadBalance lb) {
-        this.lb = lb;
     }
 
     /**
@@ -60,7 +50,7 @@ public class ConnectUtil {
                                  String methodName,
                                  Map<String, Object> params) {
         List<ServiceInstance> instances = discoveryClient.getInstances(serviceId);
-        ServiceInstance instance = loadBalance.choose(serviceId,instances);
+        ServiceInstance instance = LoadBalance.choose(instances);
         HttpResult result = HTTP.builder().addMsgConvertor(new JacksonMsgConvertor()).build()
                     .sync(instance.getUri() + ConnectConstant.EXECUTE_RELATIVE_PATH)
                     .bodyType(HttpContentTypeEnum.JSON.getValue())

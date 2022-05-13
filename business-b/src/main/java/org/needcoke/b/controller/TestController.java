@@ -21,7 +21,7 @@ public class TestController {
     @GetMapping("test")
     public String test(){
         Map<String,Object> map = new HashMap<>();
-        map.put("word","严鸣是死废物");
+        map.put("word","刘勇是死废物");
         return ConnectUtil.execute("bussiness-a","config","hahha2",map);
     }
 }
