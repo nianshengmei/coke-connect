@@ -11,6 +11,8 @@ public enum LoadBalanceEnum {
     ROUND_ROBIN("1", "round-robin", "轮询"),
     RANDOM("2", "random", "随机"),
     RETRY_ROUND_ROBIN("3", "retry round-robin", "轮询重试");
+
+    /* 权重字段 metadata:nacos.weight */
     private final String code;
 
     private final String value;
