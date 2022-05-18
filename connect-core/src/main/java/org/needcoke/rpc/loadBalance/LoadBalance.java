@@ -1,4 +1,4 @@
-package org.needcoke.rpc.config;
+package org.needcoke.rpc.loadBalance;
 
 import cn.hutool.core.collection.CollUtil;
 import org.needcoke.rpc.common.constant.ConnectionExceptionEnum;

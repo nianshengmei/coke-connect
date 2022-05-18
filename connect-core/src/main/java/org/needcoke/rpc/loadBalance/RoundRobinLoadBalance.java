@@ -1,6 +1,5 @@
 package org.needcoke.rpc.loadBalance;
 
-import org.needcoke.rpc.config.LoadBalance;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.stereotype.Component;

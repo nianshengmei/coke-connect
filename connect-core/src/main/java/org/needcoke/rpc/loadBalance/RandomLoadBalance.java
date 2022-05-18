@@ -1,7 +1,6 @@
 package org.needcoke.rpc.loadBalance;
 
 import cn.hutool.core.util.RandomUtil;
-import org.needcoke.rpc.config.LoadBalance;
 import org.springframework.cloud.client.ServiceInstance;
 
 import java.util.List;
