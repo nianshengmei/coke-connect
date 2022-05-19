@@ -1,7 +1,7 @@
 # coke-connect
 
 #### 介绍
-通过对netty的极致封装，实现即时通讯，操作无比简单
+基于spring boot/spring cloud生态的跨服务rpc调用组件。支持eureka和nacos两种注册中心，支持负载均衡配置(默认轮询)。灵活的函数名称调用方式。
 
 #### 特点
 1、对linux平台的epoll优化

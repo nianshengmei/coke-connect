@@ -1,5 +1,8 @@
 package org.needcoke.rpc.annotation;
 
+import org.springframework.context.annotation.Import;
+import org.springframework.stereotype.Component;
+
 import java.lang.annotation.*;
 
 /**
@@ -11,6 +14,7 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
+@Import(Component.class)
 public @interface Rpc {
 
     String value() default "";

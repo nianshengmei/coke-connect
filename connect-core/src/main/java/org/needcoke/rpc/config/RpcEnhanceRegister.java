@@ -29,6 +29,7 @@ public class RpcEnhanceRegister implements ImportBeanDefinitionRegistrar, Resour
     public void registerBeanDefinitions(AnnotationMetadata annotationMetadata,
                                         BeanDefinitionRegistry registry,
                                         BeanNameGenerator importBeanNameGenerator) {
+        ImportBeanDefinitionRegistrar.super.registerBeanDefinitions(annotationMetadata, registry, importBeanNameGenerator);
         //获取所有注解的属性和值
         AnnotationAttributes annoAttrs = AnnotationAttributes.fromMap(annotationMetadata.getAnnotationAttributes(Rpc.class.getName()));
         //获取到basePackage的值
@@ -50,9 +51,6 @@ public class RpcEnhanceRegister implements ImportBeanDefinitionRegistrar, Resour
         scanHandle.setBeanNameGenerator(new RpcBeanNameGenerator());
         //扫描指定路径下的接口
         Set<BeanDefinitionHolder> beanDefinitionHolders = scanHandle.doScan(basePackages);
-
-
-        ImportBeanDefinitionRegistrar.super.registerBeanDefinitions(annotationMetadata, registry, importBeanNameGenerator);
     }
 
     @Override
