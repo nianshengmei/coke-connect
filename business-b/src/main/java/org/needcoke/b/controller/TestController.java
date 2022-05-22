@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,9 +20,9 @@ import java.util.Map;
 public class TestController {
 
     @GetMapping("test")
-    public String test(){
+    public String test(HttpServletRequest request){
         Map<String,Object> map = new HashMap<>();
         map.put("word","刘勇是死废物");
-        return ConnectUtil.execute("bussiness-a","config","hahha2",map);
+        return ConnectUtil.execute("bussiness-a","config","hahha2",map,request);
     }
 }

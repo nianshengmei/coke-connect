@@ -3,13 +3,11 @@ package org.needcoke.rpc.utils;
 import org.needcoke.rpc.common.constant.ConnectionExceptionEnum;
 import org.needcoke.rpc.common.exception.CokeConnectException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Syntax;
+import javax.annotation.Resource;
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -20,54 +18,33 @@ import java.util.Map;
 @Component
 public class SpringContextUtils {
 
-
-    private static ApplicationContext context;
-
-    private ApplicationContext ctx;
+    private static SpringContextUtils instance;
 
 
-    private static Map<String, Method> beanNameMethodMap;
-
-    private Map<String, Method> bnmm;
-
-    private static Map<String, Method> classNameMethodMap;
+    @Resource
+    private ApplicationContext context;
 
 
-    private Map<String, Method> cnmm;
+    @Resource(name = "beanNameMethodMap")
+    private Map<String, Method> beanNameMethodMap;
 
-    @Autowired
-    public ApplicationContext getCtx() {
-        return ctx;
-    }
-
-    @Autowired
-    @Qualifier(value = "beanNameMethodMap")
-    public Map<String, Method> getBnmm() {
-        return bnmm;
-    }
-
-    @Autowired
-    @Qualifier(value = "classNameMethodMap")
-    public Map<String, Method> getCnmm() {
-        return cnmm;
-    }
+    @Resource(name = "classNameMethodMap")
+    private Map<String, Method> classNameMethodMap;
 
     @PostConstruct
-    public void init(){
-        context = ctx;
-        beanNameMethodMap = bnmm;
-        classNameMethodMap = cnmm;
+    public void init() {
+        instance = context.getBean(SpringContextUtils.class);
     }
 
-    public static <T> T getBean(String beanName) {
+    public <T> T getBeans(String beanName) {
         try {
             return (T) context.getBean(beanName);
-        }catch (NoSuchBeanDefinitionException exception){
+        } catch (NoSuchBeanDefinitionException exception) {
             throw new CokeConnectException(ConnectionExceptionEnum.NO_SUCH_BEAN_NAME);
         }
     }
 
-    public static <T> T getBean(Class<T> clz){
+    public <T> T getBeans(Class<T> clz) {
         return context.getBean(clz);
     }
 
@@ -77,8 +54,19 @@ public class SpringContextUtils {
      * @author Gilgamesh
      * @since V1.0
      */
-    public static Method getMethod(String beanName,String methodName){
-        return beanNameMethodMap.get(beanName+"#"+methodName);
+    public Method getMethods(String beanName, String methodName) {
+        return beanNameMethodMap.get(beanName + "#" + methodName);
     }
 
+    public static <T> T getBean(String beanName){
+        return instance.getBeans(beanName);
+    }
+
+    public static  <T> T getBean(Class<T> clz) {
+        return instance.getBeans(clz);
+    }
+
+    public static Method getMethod(String beanName, String methodName) {
+        return instance.getMethods(beanName,methodName);
+    }
 }

@@ -3,15 +3,18 @@ package org.needcoke.a.configuration;
 import lombok.extern.slf4j.Slf4j;
 import org.needcoke.rpc.annotation.Call;
 import org.needcoke.rpc.annotation.Rpc;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author yanming
  * @date 2022/5/11
  */
-@Rpc
+@Component
 @Slf4j
+@Rpc
 public class Config {
+
 
     public String haha(){
         log.info(this.getClass().getName()+":haha()被调用");

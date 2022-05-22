@@ -1,5 +1,6 @@
 package org.needcoke.rpc.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.needcoke.rpc.common.constant.ConnectConstant;
@@ -26,6 +27,7 @@ public class RpcController {
     public Object execute(@RequestParam String beanName,
                           @RequestParam String methodName,
                           @RequestBody Map<String, Object> params) {
+        log.info("execute -- beanName : {} , methodName : {} , param : {}",beanName,methodName, JSONObject.toJSONString(params));
         Method method = SpringContextUtils.getMethod(beanName, methodName);
         if (null == method) {
             log.error(ConnectionExceptionEnum.BEAN_WITHOUT_METHOD.logStatement(ConnectConstant.EXECUTE_RELATIVE_PATH));

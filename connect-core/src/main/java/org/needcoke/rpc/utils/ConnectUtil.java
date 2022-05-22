@@ -3,6 +3,7 @@ package org.needcoke.rpc.utils;
 import com.alibaba.fastjson.JSONObject;
 import com.ejlchina.okhttps.HTTP;
 import com.ejlchina.okhttps.HttpResult;
+import com.ejlchina.okhttps.SHttpTask;
 import com.ejlchina.okhttps.jackson.JacksonMsgConvertor;
 import lombok.extern.slf4j.Slf4j;
 import org.needcoke.rpc.common.constant.ConnectConstant;
@@ -14,6 +15,8 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
@@ -58,15 +61,20 @@ public class ConnectUtil {
      */
     public static String execute(String serviceId, String beanName,
                                  String methodName,
-                                 Map<String, Object> params) {
+                                 Map<String, Object> params , HttpServletRequest request) {
         List<ServiceInstance> instances = discoveryClient.getInstances(serviceId);
         ServiceInstance instance = loadBalance.choose(serviceId,instances);
-        HttpResult result = HTTP.builder().addMsgConvertor(new JacksonMsgConvertor()).build()
+        SHttpTask sHttpTask = HTTP.builder().addMsgConvertor(new JacksonMsgConvertor()).build()
                 .sync(instance.getUri() + ConnectConstant.EXECUTE_RELATIVE_PATH)
                 .bodyType(HttpContentTypeEnum.JSON.getValue())
                 .addBodyPara(params)
                 .addUrlPara(ConnectConstant.BEAN_NAME, beanName)
-                .addUrlPara(ConnectConstant.METHOD_NAME, methodName)
+                .addUrlPara(ConnectConstant.METHOD_NAME, methodName);
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            sHttpTask.addHeader(headerNames.nextElement(),request.getHeader(headerNames.nextElement()));
+        }
+        HttpResult result = sHttpTask
                 .post();
         handleResult(serviceId, beanName, methodName, params, result);
         return result.getBody().toString();
