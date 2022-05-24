@@ -1,4 +1,4 @@
-package org.needcoke.rpc.processor;
+package org.needcoke.rpc.config;
 
 import cn.hutool.core.util.StrUtil;
 import org.needcoke.rpc.annotation.Call;

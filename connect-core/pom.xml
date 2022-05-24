@@ -69,20 +69,11 @@
             <artifactId>hutool-all</artifactId>
             <version>${hutool-version}</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-autoconfigure</artifactId>-->
-<!--            <version>2.3.2.RELEASE</version>-->
-<!--            <scope>compile</scope>-->
-<!--            <optional>true</optional>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-configuration-processor</artifactId>-->
-<!--            <version>2.3.2.RELEASE</version>-->
-<!--            <scope>compile</scope>-->
-<!--            <optional>true</optional>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.smartboot.socket</groupId>
+            <artifactId>aio-core</artifactId>
+            <version>1.5.15</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>

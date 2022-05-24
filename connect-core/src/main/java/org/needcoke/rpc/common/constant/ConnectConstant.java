@@ -27,4 +27,9 @@ public interface ConnectConstant {
      * 警号 #
      */
     String SHARP = "#";
+
+    /**
+     * 冒号 :
+     */
+    String COLON = ":";
 }

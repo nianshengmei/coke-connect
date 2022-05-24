@@ -1,7 +1,7 @@
 package org.needcoke.rpc.loadBalance;
 
 import cn.hutool.core.collection.CollUtil;
-import org.needcoke.rpc.common.constant.ConnectionExceptionEnum;
+import org.needcoke.rpc.common.enums.ConnectionExceptionEnum;
 import org.needcoke.rpc.common.exception.CokeConnectException;
 import org.springframework.cloud.client.ServiceInstance;
 

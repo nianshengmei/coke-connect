@@ -1,6 +1,6 @@
 package org.needcoke.rpc.utils;
 
-import org.needcoke.rpc.common.constant.ConnectionExceptionEnum;
+import org.needcoke.rpc.common.enums.ConnectionExceptionEnum;
 import org.needcoke.rpc.common.exception.CokeConnectException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;

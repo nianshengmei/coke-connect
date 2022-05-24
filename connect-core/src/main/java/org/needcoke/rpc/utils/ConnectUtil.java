@@ -1,13 +1,8 @@
 package org.needcoke.rpc.utils;
 
-import com.alibaba.fastjson.JSONObject;
-import com.ejlchina.okhttps.HTTP;
-import com.ejlchina.okhttps.HttpResult;
-import com.ejlchina.okhttps.SHttpTask;
-import com.ejlchina.okhttps.jackson.JacksonMsgConvertor;
 import lombok.extern.slf4j.Slf4j;
-import org.needcoke.rpc.common.constant.ConnectConstant;
-import org.needcoke.rpc.common.constant.HttpContentTypeEnum;
+import org.needcoke.rpc.invoker.ConnectInvoker;
+import org.needcoke.rpc.invoker.InvokeResult;
 import org.needcoke.rpc.loadBalance.LoadBalance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
@@ -15,8 +10,6 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +22,8 @@ import java.util.Map;
 public class ConnectUtil {
 
     private DiscoveryClient dc;
+
+    private ConnectInvoker ci;
     @Autowired
     public void setDc(DiscoveryClient dc) {
         this.dc = dc;
@@ -38,10 +33,13 @@ public class ConnectUtil {
 
     private static LoadBalance loadBalance;
 
+    private static ConnectInvoker connectInvoker;
+
     @PostConstruct
     public void init() {
         discoveryClient = dc;
         loadBalance = lb;
+        connectInvoker = ci;
     }
 
     private LoadBalance lb;
@@ -49,6 +47,11 @@ public class ConnectUtil {
     @Autowired
     public void setLb(LoadBalance lb) {
         this.lb = lb;
+    }
+
+    @Autowired
+    public static void setConnectInvoker(ConnectInvoker connectInvoker) {
+        ConnectUtil.connectInvoker = connectInvoker;
     }
 
     /**
@@ -59,41 +62,17 @@ public class ConnectUtil {
      * @param methodName 方法名称 或 @Call value
      * @return 返回远程方法执行结果的json
      */
-    public static String execute(String serviceId, String beanName,
+    public static InvokeResult execute(String serviceId, String beanName,
                                  String methodName,
-                                 Map<String, Object> params , HttpServletRequest request) {
+                                 Map<String, Object> params) {
         List<ServiceInstance> instances = discoveryClient.getInstances(serviceId);
         ServiceInstance instance = loadBalance.choose(serviceId,instances);
-        SHttpTask sHttpTask = HTTP.builder().addMsgConvertor(new JacksonMsgConvertor()).build()
-                .sync(instance.getUri() + ConnectConstant.EXECUTE_RELATIVE_PATH)
-                .bodyType(HttpContentTypeEnum.JSON.getValue())
-                .addBodyPara(params)
-                .addUrlPara(ConnectConstant.BEAN_NAME, beanName)
-                .addUrlPara(ConnectConstant.METHOD_NAME, methodName);
-        Enumeration<String> headerNames = request.getHeaderNames();
-        while (headerNames.hasMoreElements()) {
-            sHttpTask.addHeader(headerNames.nextElement(),request.getHeader(headerNames.nextElement()));
-        }
-        HttpResult result = sHttpTask
-                .post();
-        handleResult(serviceId, beanName, methodName, params, result);
-        return result.getBody().toString();
+        InvokeResult result = connectInvoker.execute(instance, beanName, methodName, params);
+        return result;
     }
 
 
 
-    /**
-     * 处理远程调用的执行结果，目前仅记录日志
-     */
-    public static void handleResult(String serviceId, String beanName,
-                                    String methodName,
-                                    Map<String, Object> params, HttpResult result) {
-        String builder = "status = " + result.getStatus() +
-                " , serviceId = " + serviceId +
-                " , beanName = " + beanName +
-                " , methodName = " + methodName +
-                " , params = " + JSONObject.toJSONString(params);
-        log.debug(builder);
-    }
+
 
 }

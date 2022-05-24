@@ -1,4 +1,4 @@
-package org.needcoke.rpc.common.constant;
+package org.needcoke.rpc.common.enums;
 
 /**
  * Http请求的contentType类型

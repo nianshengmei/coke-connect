@@ -1,6 +1,7 @@
 package org.needcoke.b.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.needcoke.rpc.invoker.InvokeResult;
 import org.needcoke.rpc.utils.ConnectUtil;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,9 +21,9 @@ import java.util.Map;
 public class TestController {
 
     @GetMapping("test")
-    public String test(HttpServletRequest request){
+    public InvokeResult test(){
         Map<String,Object> map = new HashMap<>();
         map.put("word","刘勇是死废物");
-        return ConnectUtil.execute("bussiness-a","config","hahha2",map,request);
+        return ConnectUtil.execute("bussiness-a","config","hahha2",map);
     }
 }

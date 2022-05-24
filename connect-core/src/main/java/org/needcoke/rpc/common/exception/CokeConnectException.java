@@ -1,7 +1,7 @@
 package org.needcoke.rpc.common.exception;
 
 import lombok.Data;
-import org.needcoke.rpc.common.constant.ConnectionExceptionEnum;
+import org.needcoke.rpc.common.enums.ConnectionExceptionEnum;
 
 /**
  * coke通用异常

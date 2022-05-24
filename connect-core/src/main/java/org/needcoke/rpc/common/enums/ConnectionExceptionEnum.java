@@ -1,4 +1,4 @@
-package org.needcoke.rpc.common.constant;
+package org.needcoke.rpc.common.enums;
 
 /**
  * coke connection 连接异常枚举

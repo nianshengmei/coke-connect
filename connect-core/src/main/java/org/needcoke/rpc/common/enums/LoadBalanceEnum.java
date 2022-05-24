@@ -1,4 +1,4 @@
-package org.needcoke.rpc.common.constant;
+package org.needcoke.rpc.common.enums;
 
 /**
  * 定义负载均衡策略类型
