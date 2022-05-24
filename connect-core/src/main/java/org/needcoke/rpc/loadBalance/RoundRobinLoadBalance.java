@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-@Component
 public class RoundRobinLoadBalance extends LoadBalance {
 
     private final ConcurrentHashMap<String, Integer> loadBalanceMap = new ConcurrentHashMap<>();

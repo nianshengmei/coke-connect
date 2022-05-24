@@ -5,6 +5,7 @@ import org.needcoke.rpc.invoker.ConnectInvoker;
 import org.needcoke.rpc.invoker.InvokeResult;
 import org.needcoke.rpc.loadBalance.LoadBalance;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ import java.util.Map;
  * @date 2022/4/2
  */
 @Component
+@AutoConfigureAfter(ConnectInvoker.class)
 @Slf4j
 public class ConnectUtil {
 
