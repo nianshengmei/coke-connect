@@ -1,5 +1,6 @@
 package org.needcoke.rpc.invoker;
 
+import lombok.extern.slf4j.Slf4j;
 import org.needcoke.rpc.codec.CokeRequest;
 import org.needcoke.rpc.codec.CokeRequestProtocol;
 import org.needcoke.rpc.common.constant.ConnectConstant;
@@ -11,7 +12,7 @@ import org.springframework.cloud.client.ServiceInstance;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
+@Slf4j
 public class SmartSocketInvoker extends ConnectInvoker{
 
     private final Map<String, AioQuickClient> clientMap = new HashMap<>();
@@ -35,14 +36,14 @@ public class SmartSocketInvoker extends ConnectInvoker{
         CokeRequest request = new CokeRequest().setBeanName(beanName)
                 .setMethodName(methodName)
                 .setParams(params);
-        byte[] bytes = request.getBytes();
+        byte[] bytes = request.toBytes();
         try {
             session.writeBuffer().writeInt(bytes.length);
             session.writeBuffer().write(bytes);
             session.writeBuffer().flush();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
-        return null;
+        return InvokeResult.nullResult();
     }
 }

@@ -26,7 +26,7 @@ public class SmartSocketServerProcessor extends SmartSocketMessageProcessor<Coke
             String beanName = request.getBeanName();
             String methodName = request.getMethodName();
             Map<String, Object> params = request.getParams();
-            log.info("execute http -- beanName : {} , methodName : {} , param : {}",beanName,methodName, JSONObject.toJSONString(params));
+            log.info("execute smart socket -- beanName : {} , methodName : {} , param : {}",beanName,methodName, JSONObject.toJSONString(params));
             Method method = SpringContextUtils.getMethod(beanName, methodName);
             if (null == method) {
                 log.error(ConnectionExceptionEnum.BEAN_WITHOUT_METHOD.logStatement(ConnectConstant.EXECUTE_RELATIVE_PATH));
@@ -36,7 +36,7 @@ public class SmartSocketServerProcessor extends SmartSocketMessageProcessor<Coke
             Collection<Object> values = params.values();
             try {
                 Object invoke = method.invoke(bean, values.toArray());
-                InvokeResult<Object> invokeResult = new InvokeResult<>().setBody(invoke).setStatus(200).setTime(30L);
+                InvokeResult invokeResult = new InvokeResult().setBody(invoke).setStatus(200).setTime(30L);
                 this.response(session,new CokeRequest().setRequestType(ConnectRequestEnum.INTERNAL_RESPONSE).setResult(invokeResult));
             } catch (Exception e) {
                 log.error(ConnectionExceptionEnum.INVOKE_METHOD_ERROR.logStatement(ConnectConstant.EXECUTE_RELATIVE_PATH));

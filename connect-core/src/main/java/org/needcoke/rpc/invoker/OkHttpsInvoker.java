@@ -6,6 +6,7 @@ import com.ejlchina.okhttps.SHttpTask;
 import com.ejlchina.okhttps.jackson.JacksonMsgConvertor;
 import org.needcoke.rpc.common.constant.ConnectConstant;
 import org.needcoke.rpc.common.enums.HttpContentTypeEnum;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
@@ -19,6 +20,7 @@ import java.util.Map;
 /**
  * 采用okHttps的跨服务调用器
  */
+@ConditionalOnMissingBean(ConnectInvoker.class)
 @Component
 public class OkHttpsInvoker extends ConnectInvoker {
     @Override
@@ -34,7 +36,9 @@ public class OkHttpsInvoker extends ConnectInvoker {
                 .addUrlPara(ConnectConstant.METHOD_NAME, methodName);
         Enumeration<String> headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
-            sHttpTask.addHeader(headerNames.nextElement(),request.getHeader(headerNames.nextElement()));
+            String nextElement = headerNames.nextElement();
+            String header = request.getHeader(nextElement);
+            sHttpTask.addHeader(nextElement,header);
         }
         HttpResult result = sHttpTask
                 .post();

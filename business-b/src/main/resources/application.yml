@@ -13,3 +13,7 @@ spring:
         group: 相亲相爱一家人
 server:
   port: 8081
+
+coke:
+  server:
+    port: 13001

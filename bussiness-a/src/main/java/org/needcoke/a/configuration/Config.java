@@ -3,6 +3,8 @@ package org.needcoke.a.configuration;
 import lombok.extern.slf4j.Slf4j;
 import org.needcoke.rpc.annotation.Call;
 import org.needcoke.rpc.annotation.Rpc;
+import org.needcoke.rpc.invoker.SmartSocketInvoker;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 /**
@@ -26,5 +28,10 @@ public class Config {
     public String haha(String word){
         log.info(this.getClass().getName()+":say()被调用");
         return "say : "+word;
+    }
+
+    @Bean
+    public SmartSocketInvoker smartSocketInvoker(){
+        return new SmartSocketInvoker();
     }
 }

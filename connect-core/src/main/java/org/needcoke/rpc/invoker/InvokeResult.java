@@ -5,6 +5,7 @@ import com.ejlchina.okhttps.HttpResult;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -13,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 
 @Data
 @Accessors(chain = true)
-public class InvokeResult<T> {
+public class InvokeResult implements Serializable {
 
     /**
      * 状态
@@ -25,19 +26,19 @@ public class InvokeResult<T> {
      */
     private long time;
 
-    private T body;
+    private Object body;
 
     public static InvokeResult of(HttpResult httpResult) {
-        return new InvokeResult<>().setStatus(httpResult.getStatus())
+        return new InvokeResult().setStatus(httpResult.getStatus())
                 .setTime(httpResult.getTask().httpClient().totalTimeoutMillis())
-                .setBody(httpResult.getBody());
+                .setBody(httpResult.getBody().toString());
     }
 
-    public static  <R> InvokeResult<R> of(HttpResult httpResult, Class<R> clz) {
-        return new InvokeResult<R>().setStatus(httpResult.getStatus())
-                .setTime(httpResult.getTask().httpClient().totalTimeoutMillis())
-                .setBody(JSONObject.parseObject(httpResult.getBody().toString(), clz));
+    public static  InvokeResult nullResult(){
+        return new InvokeResult().setStatus(200)
+                .setTime(20L);
     }
+
 
     public String toJson(){
         return JSONObject.toJSONString(this);

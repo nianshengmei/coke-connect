@@ -48,11 +48,12 @@ public class ConnectUtil {
     public void setLb(LoadBalance lb) {
         this.lb = lb;
     }
+    @Autowired
+    public void setCi(ConnectInvoker ci) {
+        this.ci = ci;
+    }
 
     @Autowired
-    public static void setConnectInvoker(ConnectInvoker connectInvoker) {
-        ConnectUtil.connectInvoker = connectInvoker;
-    }
 
     /**
      * 执行远程方法

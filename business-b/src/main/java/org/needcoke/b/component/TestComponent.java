@@ -1,5 +1,6 @@
 package org.needcoke.b.component;
 
+import org.needcoke.rpc.invoker.SmartSocketInvoker;
 import org.needcoke.rpc.loadBalance.RoundRobinLoadBalance;
 import org.needcoke.rpc.loadBalance.WeightedResponseTimeBalance;
 import org.springframework.context.annotation.Bean;
@@ -20,5 +21,9 @@ public class TestComponent {
         return new WeightedResponseTimeBalance();
     }
 
+    @Bean
+    public SmartSocketInvoker smartSocketInvoker(){
+        return new SmartSocketInvoker();
+    }
 
 }
