@@ -6,6 +6,7 @@ import org.needcoke.rpc.config.ServerConfig;
 import org.needcoke.rpc.processor.SmartSocketServerProcessor;
 import org.smartboot.socket.transport.AioQuickServer;
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import java.io.IOException;
 
@@ -22,7 +23,13 @@ public class SmartSocketServer implements ConnectionServer{
     @Override
     public void start() throws IOException {
         server = new AioQuickServer(serverConfig.getCokeServerPort(), new CokeRequestProtocol(),new SmartSocketServerProcessor());
+        server.setBannerEnabled(false);
         server.start();
         log.info("smart socket server start on port {}",serverConfig.getCokeServerPort());
+    }
+
+    @PreDestroy
+    public void destroy(){
+        server.shutdown();
     }
 }

@@ -9,10 +9,13 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Gilgamesh
@@ -55,7 +58,21 @@ public class ConnectUtil {
         this.ci = ci;
     }
 
-    @Autowired
+    public static final AtomicInteger requestIdMaker = new AtomicInteger();
+
+    public static final Map<Integer, DeferredResult> requestMap = new ConcurrentHashMap();
+
+    public static void putRequestMap(DeferredResult value){
+        requestMap.put(requestIdMaker.addAndGet(1),value);
+    }
+
+    public static void putRequestMap(Integer requestId,DeferredResult value){
+        requestMap.put(requestId,value);
+    }
+
+    public static DeferredResult getFromRequestMap(Integer key){
+        return requestMap.get(key);
+    }
 
     /**
      * 执行远程方法

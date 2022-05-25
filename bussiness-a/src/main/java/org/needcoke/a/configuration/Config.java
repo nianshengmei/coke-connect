@@ -30,8 +30,8 @@ public class Config {
         return "say : "+word;
     }
 
-//    @Bean
-//    public SmartSocketInvoker smartSocketInvoker(){
-//        return new SmartSocketInvoker();
-//    }
+    @Bean
+    public SmartSocketInvoker smartSocketInvoker(){
+        return new SmartSocketInvoker();
+    }
 }
