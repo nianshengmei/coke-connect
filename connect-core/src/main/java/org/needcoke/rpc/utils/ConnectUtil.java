@@ -1,6 +1,12 @@
 package org.needcoke.rpc.utils;
 
+import com.ejlchina.okhttps.HTTP;
+import com.ejlchina.okhttps.HttpResult;
+import com.ejlchina.okhttps.SHttpTask;
+import com.ejlchina.okhttps.jackson.JacksonMsgConvertor;
 import lombok.extern.slf4j.Slf4j;
+import org.needcoke.rpc.common.constant.ConnectConstant;
+import org.needcoke.rpc.common.enums.HttpContentTypeEnum;
 import org.needcoke.rpc.invoker.ConnectInvoker;
 import org.needcoke.rpc.invoker.InvokeResult;
 import org.needcoke.rpc.loadBalance.LoadBalance;
@@ -9,9 +15,14 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -89,6 +100,24 @@ public class ConnectUtil {
         ServiceInstance instance = loadBalance.choose(serviceId,instances);
         InvokeResult result = connectInvoker.execute(instance, beanName, methodName, params);
         return result;
+    }
+
+
+    public static Integer getCokeServerPort(ServiceInstance instance){
+        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
+        SHttpTask sHttpTask = HTTP.builder().addMsgConvertor(new JacksonMsgConvertor()).build()
+                .sync(instance.getUri() + ConnectConstant.COKE_PORT_RELATIVE_PATH)
+                .bodyType(HttpContentTypeEnum.JSON.getValue());
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String nextElement = headerNames.nextElement();
+            String header = request.getHeader(nextElement);
+            sHttpTask.addHeader(nextElement,header);
+        }
+        HttpResult result = sHttpTask
+                .get();
+        return result.getBody().toBean(Integer.class);
     }
 
 

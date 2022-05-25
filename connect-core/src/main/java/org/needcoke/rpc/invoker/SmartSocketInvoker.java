@@ -31,8 +31,13 @@ public class SmartSocketInvoker extends ConnectInvoker {
     @Override
     public InvokeResult execute(ServiceInstance instance, String beanName, String methodName, Map<String, Object> params) {
         String uri = instance.getHost() + ConnectConstant.COLON + instance.getPort();
+        Integer serverPort = ConnectUtil.getCokeServerPort(instance);
+        if(0 == serverPort){
+            throw new RuntimeException("对方服务未开起server!");
+            //TODO 异常统一
+        }
         if (!sessionMap.containsKey(uri)) {
-            AioQuickClient aioQuickClient = new AioQuickClient(instance.getHost(), instance.getPort(), new CokeRequestProtocol(), new SmartSocketServerProcessor());
+            AioQuickClient aioQuickClient = new AioQuickClient(instance.getHost(), serverPort, new CokeRequestProtocol(), new SmartSocketServerProcessor());
             clientMap.put(uri, aioQuickClient);
             try {
                 AioSession session = aioQuickClient.start();
@@ -42,7 +47,7 @@ public class SmartSocketInvoker extends ConnectInvoker {
             }
 
         }
-        AioSession session = sessionMap.get(uri);
+        AioSession session = clientMap.get(uri).getSession();
         int requestId = ConnectUtil.requestIdMaker.addAndGet(1);
         CokeRequest request = new CokeRequest().setBeanName(beanName)
                 .setMethodName(methodName)

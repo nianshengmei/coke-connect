@@ -5,10 +5,14 @@ import org.needcoke.rpc.codec.CokeRequestProtocol;
 import org.needcoke.rpc.config.ServerConfig;
 import org.needcoke.rpc.processor.smart_socket.SmartSocketServerProcessor;
 import org.smartboot.socket.transport.AioQuickServer;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.List;
 
 @Slf4j
 public class SmartSocketServer implements ConnectionServer{
