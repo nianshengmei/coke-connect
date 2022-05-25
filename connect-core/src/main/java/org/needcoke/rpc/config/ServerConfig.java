@@ -3,9 +3,12 @@ package org.needcoke.rpc.config;
 import lombok.Getter;
 import org.needcoke.rpc.invoker.ConnectInvoker;
 import org.needcoke.rpc.invoker.OkHttpsInvoker;
+import org.needcoke.rpc.invoker.SmartSocketInvoker;
 import org.needcoke.rpc.loadBalance.LoadBalance;
 import org.needcoke.rpc.loadBalance.RoundRobinLoadBalance;
+import org.needcoke.rpc.server.SmartSocketServer;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,15 +23,30 @@ public class ServerConfig {
     @Value("${coke.server.type:http}")
     private String serverType;
 
+    /**
+     * coke-connect的默认远程调用组件为okHttps
+     */
     @ConditionalOnMissingBean(ConnectInvoker.class)
     @Bean
     public OkHttpsInvoker okHttpsInvoker(){
         return new OkHttpsInvoker();
     }
 
+     /**
+      *  coke-connect的默认负载均衡策略为轮询
+      */
     @ConditionalOnMissingBean(LoadBalance.class)
     @Bean
     public RoundRobinLoadBalance roundRobinLoadBalance(){
         return new RoundRobinLoadBalance();
+    }
+
+    /**
+     *  当远程调用方式修改为SmartSocketInvoker时启动SmartSocketServer
+     */
+    @ConditionalOnBean(SmartSocketInvoker.class)
+    @Bean
+    public SmartSocketServer smartSocketServer(){
+        return  new SmartSocketServer();
     }
 }
