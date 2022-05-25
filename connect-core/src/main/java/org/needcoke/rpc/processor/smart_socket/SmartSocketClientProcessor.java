@@ -1,4 +1,4 @@
-package org.needcoke.rpc.processor;
+package org.needcoke.rpc.processor.smart_socket;
 
 import org.needcoke.rpc.codec.CokeRequest;
 import org.needcoke.rpc.common.enums.ConnectRequestEnum;

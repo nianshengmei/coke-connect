@@ -79,7 +79,8 @@ public class CokeRequest {
     }
 
     public byte[] toBytes(){
-        return JSONObject.toJSONString(this).getBytes(StandardCharsets.UTF_8);
+        String jsonString = JSONObject.toJSONString(this);
+        return jsonString.getBytes();
     }
 
     public CokeRequest setRequestId(Integer requestId){

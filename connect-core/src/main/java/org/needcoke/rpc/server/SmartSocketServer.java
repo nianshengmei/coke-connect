@@ -3,7 +3,7 @@ package org.needcoke.rpc.server;
 import lombok.extern.slf4j.Slf4j;
 import org.needcoke.rpc.codec.CokeRequestProtocol;
 import org.needcoke.rpc.config.ServerConfig;
-import org.needcoke.rpc.processor.SmartSocketServerProcessor;
+import org.needcoke.rpc.processor.smart_socket.SmartSocketServerProcessor;
 import org.smartboot.socket.transport.AioQuickServer;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;

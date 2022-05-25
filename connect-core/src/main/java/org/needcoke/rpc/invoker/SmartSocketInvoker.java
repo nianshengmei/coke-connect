@@ -4,14 +4,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.needcoke.rpc.codec.CokeRequest;
 import org.needcoke.rpc.codec.CokeRequestProtocol;
 import org.needcoke.rpc.common.constant.ConnectConstant;
-import org.needcoke.rpc.processor.SmartSocketServerProcessor;
+import org.needcoke.rpc.processor.smart_socket.SmartSocketServerProcessor;
 import org.needcoke.rpc.utils.ConnectUtil;
 import org.smartboot.socket.transport.AioQuickClient;
 import org.smartboot.socket.transport.AioSession;
+import org.smartboot.socket.transport.WriteBuffer;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -53,6 +55,8 @@ public class SmartSocketInvoker extends ConnectInvoker {
             session.writeBuffer().flush();
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
+        }finally {
+            session.close();
         }
         DeferredResult deferredResult = new DeferredResult(3000L);
         ConnectUtil.putRequestMap(deferredResult);

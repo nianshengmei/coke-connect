@@ -1,4 +1,4 @@
-package org.needcoke.rpc.processor;
+package org.needcoke.rpc.processor.smart_socket;
 
 import org.needcoke.rpc.codec.CokeRequest;
 import org.needcoke.rpc.invoker.InvokeResult;
@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public abstract class SmartSocketMessageProcessor<T> implements MessageProcessor<CokeRequest> {
+public abstract class SmartSocketMessageProcessor<T> implements MessageProcessor<T> {
 
     public void responseHttp(HttpServletResponse response , InvokeResult result){
         try {
