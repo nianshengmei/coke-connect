@@ -2,14 +2,8 @@ package org.needcoke.rpc.loadBalance;
 
 import cn.hutool.core.bean.BeanUtil;
 import org.needcoke.rpc.CokeServiceInstance;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.stereotype.Component;
-
-import java.net.URI;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class WeightedResponseTimeBalance extends LoadBalance {

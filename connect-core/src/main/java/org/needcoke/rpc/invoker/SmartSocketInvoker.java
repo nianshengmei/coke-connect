@@ -39,15 +39,19 @@ public class SmartSocketInvoker extends ConnectInvoker {
         if (!sessionMap.containsKey(uri)) {
             AioQuickClient aioQuickClient = new AioQuickClient(instance.getHost(), serverPort, new CokeRequestProtocol(), new SmartSocketServerProcessor());
             clientMap.put(uri, aioQuickClient);
-            try {
-                AioSession session = aioQuickClient.start();
-                sessionMap.put(uri, session);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
+//            try {
+//                AioSession session = aioQuickClient.start();
+//                sessionMap.put(uri, session);
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
         }
-        AioSession session = clientMap.get(uri).getSession();
+        AioSession session = null;
+        try {
+            session = clientMap.get(uri).start();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         int requestId = ConnectUtil.requestIdMaker.addAndGet(1);
         CokeRequest request = new CokeRequest().setBeanName(beanName)
                 .setMethodName(methodName)

@@ -56,6 +56,7 @@ public class ConnectUtil {
         discoveryClient = dc;
         loadBalance = lb;
         connectInvoker = ci;
+        log.info("ConnectUtil 加载的 loadBalance是 {} , 加载的ConnectInvoker是 {}。",loadBalance.getClass().getSimpleName(),connectInvoker.getClass().getSimpleName());
     }
 
     private LoadBalance lb;
@@ -119,9 +120,4 @@ public class ConnectUtil {
                 .get();
         return result.getBody().toBean(Integer.class);
     }
-
-
-
-
-
 }
