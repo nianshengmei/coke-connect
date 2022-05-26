@@ -15,11 +15,11 @@ import org.springframework.stereotype.Component;
 public class TestComponent {
 
 
-    @Bean
-    @Primary
-    public WeightedResponseTimeBalance weightedResponseTimeBalance(){
-        return new WeightedResponseTimeBalance();
-    }
+//    @Bean
+//    @Primary
+//    public WeightedResponseTimeBalance weightedResponseTimeBalance(){
+//        return new WeightedResponseTimeBalance();
+//    }
 
     @Bean
     public SmartSocketInvoker smartSocketInvoker(){
