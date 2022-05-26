@@ -6,11 +6,7 @@ import com.ejlchina.okhttps.SHttpTask;
 import com.ejlchina.okhttps.jackson.JacksonMsgConvertor;
 import org.needcoke.rpc.common.constant.ConnectConstant;
 import org.needcoke.rpc.common.enums.HttpContentTypeEnum;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -23,6 +19,11 @@ import java.util.Map;
  * 采用okHttps的跨服务调用器
  */
 public class OkHttpsInvoker extends ConnectInvoker {
+
+    public OkHttpsInvoker() {
+        System.out.println("哈哈哈");
+    }
+
     @Override
     public InvokeResult execute(ServiceInstance instance, String beanName, String methodName, Map<String, Object> params) {
 
