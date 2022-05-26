@@ -72,17 +72,19 @@ public class ConnectUtil {
 
     public static final AtomicInteger requestIdMaker = new AtomicInteger();
 
-    public static final Map<Integer, DeferredResult> requestMap = new ConcurrentHashMap();
+    public static final Map<Integer, InvokeResult> requestMap = new ConcurrentHashMap();
 
-    public static void putRequestMap(DeferredResult value){
-        requestMap.put(requestIdMaker.addAndGet(1),value);
+    public static void putRequestMap(InvokeResult result){
+        requestMap.put(requestIdMaker.addAndGet(1),result);
     }
 
-    public static void putRequestMap(Integer requestId,DeferredResult value){
-        requestMap.put(requestId,value);
+    public static ConcurrentHashMap<Integer,Thread> threadMap = new ConcurrentHashMap<>();
+
+    public static void putRequestMap(Integer requestId,InvokeResult result){
+        requestMap.put(requestId,result);
     }
 
-    public static DeferredResult getFromRequestMap(Integer key){
+    public static InvokeResult getFromRequestMap(Integer key){
         return requestMap.get(key);
     }
 

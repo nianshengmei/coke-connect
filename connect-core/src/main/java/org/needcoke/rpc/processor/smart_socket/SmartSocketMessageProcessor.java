@@ -26,7 +26,7 @@ public abstract class SmartSocketMessageProcessor<T> implements MessageProcessor
     public void response(AioSession session, CokeRequest response){
         WriteBuffer outputStream = session.writeBuffer();
         try {
-            byte[] bytes = response.toString().getBytes();
+            byte[] bytes = response.toBytes();
             outputStream.writeInt(bytes.length);
             outputStream.write(bytes);
             outputStream.flush();
