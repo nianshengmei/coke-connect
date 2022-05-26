@@ -3,36 +3,30 @@ package org.needcoke.rpc.common.exception;
 import lombok.Data;
 import org.needcoke.rpc.common.enums.ConnectionExceptionEnum;
 
-/**
- * coke通用异常
- *
- * @author yanming
- * @date 2022/5/12
- */
 @Data
-public class CokeConnectException extends RuntimeException {
+public class CokeSmartSocketException extends RuntimeException {
 
     private String errorCode;
 
     private String note;
 
-    public CokeConnectException(String message, Throwable cause, String errorCode) {
+    public CokeSmartSocketException(String message, Throwable cause, String errorCode) {
         super(message, cause);
         this.errorCode = errorCode;
     }
 
-    public CokeConnectException(String message, String errorCode) {
+    public CokeSmartSocketException(String message, String errorCode) {
         super(message);
         this.errorCode = errorCode;
     }
 
-    public CokeConnectException(ConnectionExceptionEnum connectionExceptionEnum) {
+    public CokeSmartSocketException(ConnectionExceptionEnum connectionExceptionEnum) {
         super(connectionExceptionEnum.getValue());
         this.errorCode = connectionExceptionEnum.getErrorCode();
         this.note = connectionExceptionEnum.getNote();
     }
 
-    public CokeConnectException(ConnectionExceptionEnum connectionExceptionEnum,Throwable e) {
+    public CokeSmartSocketException(ConnectionExceptionEnum connectionExceptionEnum,Throwable e) {
         super(connectionExceptionEnum.getValue(),e);
         this.errorCode = connectionExceptionEnum.getErrorCode();
         this.note = connectionExceptionEnum.getNote();

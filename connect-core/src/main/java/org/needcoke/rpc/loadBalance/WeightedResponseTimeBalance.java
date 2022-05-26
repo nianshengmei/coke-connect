@@ -40,6 +40,7 @@ public class WeightedResponseTimeBalance extends LoadBalance {
         Double weight = 0.0;
         for (Double d : weightList) {
             weight = Collections.max(weightList);
+            int frequency = Collections.frequency(weightList, weight);
             if (p>=weight) {
                 p -= weight;
                 weightList.remove(weight);
