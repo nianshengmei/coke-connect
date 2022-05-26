@@ -13,6 +13,8 @@ public interface ConnectConstant {
      */
     String EXECUTE_RELATIVE_PATH = "/coke/connect/execute";
 
+    String COKE_PORT_RELATIVE_PATH = "/coke/connect/port";
+
     /**
      * 实例名称
      */

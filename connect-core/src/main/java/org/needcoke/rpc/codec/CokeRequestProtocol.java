@@ -23,6 +23,14 @@ public class CokeRequestProtocol implements Protocol<CokeRequest> {
         byte[] b = new byte[length];
         readBuffer.get(b);
         readBuffer.mark();
-        return JSONObject.parseObject(new String(b),CokeRequest.class);
+        String json = new String(b);
+        CokeRequest request = null;
+        try {
+            request = JSONObject.parseObject(json, CokeRequest.class);
+        }catch (Exception e){
+            System.out.println("error { "+json+" }");
+            throw new RuntimeException(e);
+        }
+        return request;
     }
 }

@@ -14,3 +14,7 @@ spring:
         access-key:
 server:
   port: 8000
+
+coke:
+    server:
+      port: 13005

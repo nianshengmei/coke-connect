@@ -13,6 +13,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 @Getter
 @Configuration
 public class ServerConfig {
@@ -48,5 +51,14 @@ public class ServerConfig {
     @Bean
     public SmartSocketServer smartSocketServer(){
         return  new SmartSocketServer();
+    }
+
+    /**
+     * server uri -> 端口号
+     */
+    @ConditionalOnMissingBean(OkHttpsInvoker.class)
+    @Bean
+    public Map<String,Integer> cokeServerPortMap(){
+        return new ConcurrentHashMap<>();
     }
 }

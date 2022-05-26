@@ -3,6 +3,7 @@ package org.needcoke.rpc.invoker;
 import com.alibaba.fastjson.JSONObject;
 import com.ejlchina.okhttps.HttpResult;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
@@ -14,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 
 @Data
 @Accessors(chain = true)
+@EqualsAndHashCode
 public class InvokeResult implements Serializable {
 
     /**

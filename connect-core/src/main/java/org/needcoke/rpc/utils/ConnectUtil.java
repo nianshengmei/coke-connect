@@ -1,6 +1,12 @@
 package org.needcoke.rpc.utils;
 
+import com.ejlchina.okhttps.HTTP;
+import com.ejlchina.okhttps.HttpResult;
+import com.ejlchina.okhttps.SHttpTask;
+import com.ejlchina.okhttps.jackson.JacksonMsgConvertor;
 import lombok.extern.slf4j.Slf4j;
+import org.needcoke.rpc.common.constant.ConnectConstant;
+import org.needcoke.rpc.common.enums.HttpContentTypeEnum;
 import org.needcoke.rpc.invoker.ConnectInvoker;
 import org.needcoke.rpc.invoker.InvokeResult;
 import org.needcoke.rpc.loadBalance.LoadBalance;
@@ -9,10 +15,18 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Gilgamesh
@@ -42,6 +56,7 @@ public class ConnectUtil {
         discoveryClient = dc;
         loadBalance = lb;
         connectInvoker = ci;
+        log.info("ConnectUtil 加载的 loadBalance是 {} , 加载的ConnectInvoker是 {}。",loadBalance.getClass().getSimpleName(),connectInvoker.getClass().getSimpleName());
     }
 
     private LoadBalance lb;
@@ -55,7 +70,23 @@ public class ConnectUtil {
         this.ci = ci;
     }
 
-    @Autowired
+    public static final AtomicInteger requestIdMaker = new AtomicInteger();
+
+    public static final Map<Integer, InvokeResult> requestMap = new ConcurrentHashMap();
+
+    public static void putRequestMap(InvokeResult result){
+        requestMap.put(requestIdMaker.addAndGet(1),result);
+    }
+
+    public static ConcurrentHashMap<Integer,Thread> threadMap = new ConcurrentHashMap<>();
+
+    public static void putRequestMap(Integer requestId,InvokeResult result){
+        requestMap.put(requestId,result);
+    }
+
+    public static InvokeResult getFromRequestMap(Integer key){
+        return requestMap.get(key);
+    }
 
     /**
      * 执行远程方法
@@ -75,7 +106,20 @@ public class ConnectUtil {
     }
 
 
-
-
-
+    public static Integer getCokeServerPort(ServiceInstance instance){
+        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
+        SHttpTask sHttpTask = HTTP.builder().addMsgConvertor(new JacksonMsgConvertor()).build()
+                .sync(instance.getUri() + ConnectConstant.COKE_PORT_RELATIVE_PATH)
+                .bodyType(HttpContentTypeEnum.JSON.getValue());
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String nextElement = headerNames.nextElement();
+            String header = request.getHeader(nextElement);
+            sHttpTask.addHeader(nextElement,header);
+        }
+        HttpResult result = sHttpTask
+                .get();
+        return result.getBody().toBean(Integer.class);
+    }
 }

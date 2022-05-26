@@ -21,9 +21,9 @@ public class TestComponent {
         return new WeightedResponseTimeBalance();
     }
 
-//    @Bean
-//    public SmartSocketInvoker smartSocketInvoker(){
-//        return new SmartSocketInvoker();
-//    }
+    @Bean
+    public SmartSocketInvoker smartSocketInvoker(){
+        return new SmartSocketInvoker();
+    }
 
 }
