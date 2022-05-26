@@ -2,8 +2,15 @@ package org.needcoke.rpc.loadBalance;
 
 import cn.hutool.core.bean.BeanUtil;
 import org.needcoke.rpc.CokeServiceInstance;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.stereotype.Component;
+
+import java.net.URI;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class WeightedResponseTimeBalance extends LoadBalance {
@@ -23,24 +30,30 @@ public class WeightedResponseTimeBalance extends LoadBalance {
         List<CokeServiceInstance> cokeServiceInstanceList = instances.stream().map(this::toCokeInstance).collect(Collectors.toList());
         Map<String, String> weightMap = cokeServiceInstanceList.stream().collect(Collectors.toMap((i) -> i.getHost() + ":" + i.getPort(), CokeServiceInstance::getWeight));
         Map<ServiceInstance, Double> instanceWeightMap = new HashMap<>();
+        List<Double> weightList = new CopyOnWriteArrayList<>();
+        List<Double> wList = new ArrayList<>();
         for (ServiceInstance instance : instances) {
-            instanceWeightMap.put(instance, Double.parseDouble(weightMap.get(instance.getHost() + ":" + instance.getPort())));
+//            instanceWeightMap.put(instance, Double.parseDouble(weightMap.get(instance.getHost() + ":" + instance.getPort())));
+            weightList.add(Double.parseDouble(weightMap.get(instance.getHost() + ":" + instance.getPort())));
+            wList.add(Double.parseDouble(weightMap.get(instance.getHost() + ":" + instance.getPort())));
         }
-        List<ServiceInstance> list = new ArrayList<>();
 
-        Set<ServiceInstance> keySet = instanceWeightMap.keySet();
-
-        for (ServiceInstance serviceInstance : keySet) {
-            Double d = instanceWeightMap.get(serviceInstance);
-            long round = Math.round(d);
-            for (int i = 0; i < round; i++) {
-                list.add(serviceInstance);
+        Double sum = weightList.stream().reduce(Double::sum).orElse(0.0);
+        int index = 0;
+        int p = (int) (offset%sum);
+        Double weight = 0.0;
+        for (Double d : weightList) {
+            weight = Collections.max(weightList);
+            if (p>=weight) {
+                p -= weight;
+                weightList.remove(weight);
+            }else{
+                index = wList.indexOf(weight);
+                break;
             }
         }
-
-        ServiceInstance serviceInstance = list.get(offset % list.size());
         offset++;
-        return serviceInstance;
+        return instances.get(index);
     }
 
     private CokeServiceInstance toCokeInstance(ServiceInstance instance) {
