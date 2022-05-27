@@ -33,9 +33,13 @@ public class SmartSocketServerProcessor extends SmartSocketMessageProcessor<Coke
                 throw new CokeConnectException(ConnectionExceptionEnum.BEAN_WITHOUT_METHOD);
             }
             Object bean = SpringContextUtils.getBean(beanName);
-            Collection<Object> values = params.values();
             try {
-                Object invoke = method.invoke(bean, values.toArray());
+                Object invoke = null;
+                if(CollUtil.isEmpty(params)){
+                    invoke= method.invoke(bean);
+                }else {
+                    invoke = method.invoke(bean,params.values().toArray());
+                }
                 InvokeResult invokeResult = new InvokeResult().setBody(invoke).setStatus(200).setTime(30L);
                 this.response(session, request.setRequestType(ConnectRequestEnum.INTERNAL_RESPONSE).setResult(invokeResult));
             } catch (Exception e) {
