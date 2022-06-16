@@ -1,5 +1,6 @@
 package org.needcoke.rpc.processor.smart_socket;
 
+import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.needcoke.rpc.codec.CokeRequest;
@@ -13,7 +14,6 @@ import org.smartboot.socket.StateMachineEnum;
 import org.smartboot.socket.transport.AioSession;
 
 import java.lang.reflect.Method;
-import java.util.Collection;
 import java.util.Map;
 
 @Slf4j
@@ -44,7 +44,7 @@ public class SmartSocketServerProcessor extends SmartSocketMessageProcessor<Coke
                 this.response(session, request.setRequestType(ConnectRequestEnum.INTERNAL_RESPONSE).setResult(invokeResult));
             } catch (Exception e) {
                 log.error(ConnectionExceptionEnum.INVOKE_METHOD_ERROR.logStatement(ConnectConstant.EXECUTE_RELATIVE_PATH));
-                throw new CokeConnectException(ConnectionExceptionEnum.INVOKE_METHOD_ERROR);
+                throw new CokeConnectException(ConnectionExceptionEnum.INVOKE_METHOD_ERROR,e);
             }
         }
 

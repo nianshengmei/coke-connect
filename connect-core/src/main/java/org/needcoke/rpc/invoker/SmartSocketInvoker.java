@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.needcoke.rpc.codec.CokeRequest;
 import org.needcoke.rpc.codec.CokeRequestProtocol;
 import org.needcoke.rpc.common.constant.ConnectConstant;
+import org.needcoke.rpc.common.enums.ConnectionExceptionEnum;
+import org.needcoke.rpc.common.exception.CokeConnectException;
 import org.needcoke.rpc.processor.smart_socket.SmartSocketClientProcessor;
 import org.needcoke.rpc.utils.ConnectUtil;
 import org.smartboot.socket.transport.AioQuickClient;
@@ -32,8 +34,7 @@ public class SmartSocketInvoker extends ConnectInvoker {
         String uri = instance.getHost() + ConnectConstant.COLON + instance.getPort();
         Integer serverPort = ConnectUtil.getCokeServerPort(instance);
         if (0 == serverPort) {
-            throw new RuntimeException("对方服务未开起server!");
-            //TODO 异常统一
+            throw new CokeConnectException(ConnectionExceptionEnum.REMOTE_SERVICE_DOES_NOT_OPEN_THE_COKE_SERVICE_PORT);
         }
         if (!sessionMap.containsKey(uri)) {
             AioQuickClient aioQuickClient = new AioQuickClient(instance.getHost(), serverPort, new CokeRequestProtocol(), new SmartSocketClientProcessor());

@@ -107,17 +107,9 @@ public class ConnectUtil {
 
 
     public static Integer getCokeServerPort(ServiceInstance instance){
-        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
-        HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
         SHttpTask sHttpTask = HTTP.builder().addMsgConvertor(new JacksonMsgConvertor()).build()
                 .sync(instance.getUri() + ConnectConstant.COKE_PORT_RELATIVE_PATH)
                 .bodyType(HttpContentTypeEnum.JSON.getValue());
-        Enumeration<String> headerNames = request.getHeaderNames();
-        while (headerNames.hasMoreElements()) {
-            String nextElement = headerNames.nextElement();
-            String header = request.getHeader(nextElement);
-            sHttpTask.addHeader(nextElement,header);
-        }
         HttpResult result = sHttpTask
                 .get();
         return result.getBody().toBean(Integer.class);

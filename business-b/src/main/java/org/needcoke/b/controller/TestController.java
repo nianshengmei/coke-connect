@@ -34,7 +34,7 @@ public class TestController {
     public InvokeResult test(){
         Map<String,Object> map = new HashMap<>();
         map.put("word","刘勇是死废物");
-        InvokeResult execute = ConnectUtil.execute("bussiness-a", "config", "hahha2", map);
+        InvokeResult execute = ConnectUtil.execute("bussiness-c", "cCon", "cTest", map);
         return execute;
     }
 

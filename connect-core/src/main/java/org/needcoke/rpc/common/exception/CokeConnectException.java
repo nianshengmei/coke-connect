@@ -2,6 +2,8 @@ package org.needcoke.rpc.common.exception;
 
 import lombok.Data;
 import org.needcoke.rpc.common.enums.ConnectionExceptionEnum;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * coke通用异常
@@ -10,6 +12,7 @@ import org.needcoke.rpc.common.enums.ConnectionExceptionEnum;
  * @date 2022/5/12
  */
 @Data
+@ResponseStatus(code = HttpStatus.BAD_GATEWAY)
 public class CokeConnectException extends RuntimeException {
 
     private String errorCode;
