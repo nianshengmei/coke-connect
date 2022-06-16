@@ -18,8 +18,11 @@ public enum ConnectionExceptionEnum {
 
     CAN_NOT_FIND_SUCH_INSTANCE("0004","can't find this instance.","找不到对应的实例"),
 
-    REMOTE_SERVICE_DOES_NOT_OPEN_THE_COKE_SERVICE_PORT("0005","remote service does not open the coke service port.","远程服务未开启coke服务端口")
+    REMOTE_SERVICE_DOES_NOT_OPEN_THE_COKE_SERVICE_PORT("0005","remote service does not open the coke service port.","远程服务未开启coke服务端口"),
 
+    RECONNECTION_WITH_REMOTE_SERVICE_FAILED("0006","reconnection with remote service failed","与远程服务重建连接失败"),
+
+    CONNECTION_WITH_REMOTE_SERVICE_FAILED("0007","reconnection with remote service failed","与远程服务重建连接失败"),
     ;
     private final String code;
 

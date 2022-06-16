@@ -28,7 +28,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class RpcController {
 
-
     private ServerConfig serverConfig;
 
     @Resource

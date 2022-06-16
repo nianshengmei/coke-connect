@@ -15,10 +15,10 @@ import java.util.Map;
 @Rpc
 public class CController {
 
-//    @Bean
-//    public SmartSocketInvoker smartSocketInvoker(){
-//        return new SmartSocketInvoker();
-//    }
+    @Bean
+    public SmartSocketInvoker smartSocketInvoker(){
+        return new SmartSocketInvoker();
+    }
 
     @Call("cTest")
     public String cTest(String word){

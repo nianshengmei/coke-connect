@@ -5,6 +5,7 @@ import com.ejlchina.okhttps.HttpResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.ServiceInstance;
 
+import java.io.IOException;
 import java.util.Map;
 
 @Slf4j

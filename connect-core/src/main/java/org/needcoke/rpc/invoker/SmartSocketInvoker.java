@@ -23,7 +23,6 @@ public class SmartSocketInvoker extends ConnectInvoker {
 
     /**
      * 给AioQuickClient加个引用，防止垃圾回收。
-     * //TODO AioSession失效时重建连接
      */
     private final Map<String, AioQuickClient> clientMap = new ConcurrentHashMap<>();
 
@@ -43,7 +42,7 @@ public class SmartSocketInvoker extends ConnectInvoker {
                 AioSession session = aioQuickClient.start();
                 sessionMap.put(uri, session);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new CokeConnectException(ConnectionExceptionEnum.CONNECTION_WITH_REMOTE_SERVICE_FAILED);
             }
         }
         AioSession session = sessionMap.get(uri);
@@ -58,7 +57,16 @@ public class SmartSocketInvoker extends ConnectInvoker {
             session.writeBuffer().write(bytes);
             session.writeBuffer().flush();
         } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
+            //一般是session失效了
+            log.error(e.getMessage());
+            try {
+                session = clientMap.get(uri).start();
+            } catch (IOException ex) {
+                //与远程服务重建连接失败
+                throw new CokeConnectException(ConnectionExceptionEnum.RECONNECTION_WITH_REMOTE_SERVICE_FAILED);
+            }
+            sessionMap.put(uri,session);
+            return execute(instance,beanName,methodName,params);
         }
         InvokeResult tmp = new InvokeResult();
         long start = DateUtil.current();
