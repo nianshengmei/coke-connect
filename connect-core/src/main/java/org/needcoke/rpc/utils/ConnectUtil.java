@@ -7,6 +7,7 @@ import com.ejlchina.okhttps.jackson.JacksonMsgConvertor;
 import lombok.extern.slf4j.Slf4j;
 import org.needcoke.rpc.common.constant.ConnectConstant;
 import org.needcoke.rpc.common.enums.HttpContentTypeEnum;
+import org.needcoke.rpc.config.RequestIdContextHolder;
 import org.needcoke.rpc.invoker.ConnectInvoker;
 import org.needcoke.rpc.invoker.InvokeResult;
 import org.needcoke.rpc.loadBalance.LoadBalance;
@@ -72,15 +73,15 @@ public class ConnectUtil {
 
     public static final AtomicInteger requestIdMaker = new AtomicInteger();
 
-    public static final Map<Integer, InvokeResult> requestMap = new ConcurrentHashMap();
+    public static final Map<String, InvokeResult> requestMap = new ConcurrentHashMap();
 
     public static void putRequestMap(InvokeResult result){
-        requestMap.put(requestIdMaker.addAndGet(1),result);
+        requestMap.put(RequestIdContextHolder.getRequestId(),result);
     }
 
     public static ConcurrentHashMap<Integer,Thread> threadMap = new ConcurrentHashMap<>();
 
-    public static void putRequestMap(Integer requestId,InvokeResult result){
+    public static void putRequestMap(String requestId,InvokeResult result){
         requestMap.put(requestId,result);
     }
 
@@ -101,7 +102,7 @@ public class ConnectUtil {
                                  Map<String, Object> params) {
         List<ServiceInstance> instances = discoveryClient.getInstances(serviceId);
         ServiceInstance instance = loadBalance.choose(serviceId,instances);
-        InvokeResult result = connectInvoker.execute(instance, beanName, methodName, params);
+        InvokeResult result = connectInvoker.execute(null,instance, beanName, methodName, params);
         return result;
     }
 

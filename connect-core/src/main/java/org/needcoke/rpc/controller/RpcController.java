@@ -5,9 +5,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.needcoke.rpc.common.constant.ConnectConstant;
 import org.needcoke.rpc.common.enums.ConnectionExceptionEnum;
+import org.needcoke.rpc.common.enums.RpcTypeEnum;
 import org.needcoke.rpc.common.exception.CokeConnectException;
+import org.needcoke.rpc.config.RequestIdContextHolder;
 import org.needcoke.rpc.config.ServerConfig;
 import org.needcoke.rpc.invoker.OkHttpsInvoker;
+import org.needcoke.rpc.invoker.SmartSocketInvoker;
 import org.needcoke.rpc.utils.SpringContextUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -42,7 +45,7 @@ public class RpcController {
     public Object execute(@RequestParam String beanName,
                           @RequestParam String methodName,
                           @RequestBody Map<String, Object> params) {
-        log.info("execute http -- beanName : {} , methodName : {} , param : {}", beanName, methodName, JSONObject.toJSONString(params));
+        log.info("execute http -- beanName : {} , methodName : {} , param : {} ,requestId = {}", beanName, methodName, JSONObject.toJSONString(params), RequestIdContextHolder.getRequestId());
         Method method = SpringContextUtils.getMethod(beanName, methodName);
         if (null == method) {
             log.error(ConnectionExceptionEnum.BEAN_WITHOUT_METHOD.logStatement(ConnectConstant.EXECUTE_RELATIVE_PATH));
@@ -70,5 +73,15 @@ public class RpcController {
 
         }
         return 0;
+    }
+
+    @GetMapping("rpcType")
+    public RpcTypeEnum getRpcType(){
+        try {
+            SmartSocketInvoker bean = applicationContext.getBean(SmartSocketInvoker.class);
+        }catch (Exception e){
+            return  RpcTypeEnum.smartSocket;
+        }
+        return RpcTypeEnum.okHttp3;
     }
 }

@@ -6,9 +6,14 @@ import org.needcoke.rpc.codec.CokeRequest;
 import org.needcoke.rpc.codec.CokeRequestProtocol;
 import org.needcoke.rpc.common.constant.ConnectConstant;
 import org.needcoke.rpc.common.enums.ConnectionExceptionEnum;
+import org.needcoke.rpc.common.enums.RpcTypeEnum;
 import org.needcoke.rpc.common.exception.CokeConnectException;
+import org.needcoke.rpc.config.RequestIdContextHolder;
+import org.needcoke.rpc.net.Connector;
+import org.needcoke.rpc.net.ConnectorFactory;
 import org.needcoke.rpc.processor.smart_socket.SmartSocketClientProcessor;
 import org.needcoke.rpc.utils.ConnectUtil;
+import org.needcoke.rpc.utils.SpringContextUtils;
 import org.smartboot.socket.transport.AioQuickClient;
 import org.smartboot.socket.transport.AioSession;
 import org.springframework.cloud.client.ServiceInstance;
@@ -21,6 +26,12 @@ import java.util.concurrent.locks.LockSupport;
 @Slf4j
 public class SmartSocketInvoker extends ConnectInvoker {
 
+    private RpcTypeEnum rpcTypeEnum;
+
+    public SmartSocketInvoker(RpcTypeEnum rpcTypeEnum) {
+        this.rpcTypeEnum = rpcTypeEnum;
+    }
+
     /**
      * 给AioQuickClient加个引用，防止垃圾回收。
      */
@@ -29,7 +40,15 @@ public class SmartSocketInvoker extends ConnectInvoker {
     private final Map<String, AioSession> sessionMap = new ConcurrentHashMap<>();
 
     @Override
-    public InvokeResult execute(ServiceInstance instance, String beanName, String methodName, Map<String, Object> params) {
+    public InvokeResult execute(Connector connector, ServiceInstance instance, String beanName, String methodName, Map<String, Object> params) {
+        RpcTypeEnum remoteRpcType = getRemoteRpcType(instance);
+        if(remoteRpcType == RpcTypeEnum.okHttp3){
+            if (null == connector.getHttpInvoker()) {
+                connector.setHttpInvoker(new OkHttpsInvoker(RpcTypeEnum.okHttp3));
+            }
+            return connector.compensationExecute(instance,beanName,methodName,params);
+        }
+
         String uri = instance.getHost() + ConnectConstant.COLON + instance.getPort();
         Integer serverPort = ConnectUtil.getCokeServerPort(instance);
         if (0 == serverPort) {
@@ -47,10 +66,11 @@ public class SmartSocketInvoker extends ConnectInvoker {
         }
         AioSession session = sessionMap.get(uri);
         int requestId = ConnectUtil.requestIdMaker.addAndGet(1);
+        String COKE_REQUEST_ID_HEADER_ID_NAME = "COKE_REQUEST_ID";
         CokeRequest request = new CokeRequest().setBeanName(beanName)
                 .setMethodName(methodName)
                 .setParams(params)
-                .setRequestId(requestId);
+                .addHeader(COKE_REQUEST_ID_HEADER_ID_NAME, RequestIdContextHolder.getRequestId());
         byte[] bytes = request.toBytes();
         try {
             session.writeBuffer().writeInt(bytes.length);
@@ -62,15 +82,17 @@ public class SmartSocketInvoker extends ConnectInvoker {
             try {
                 session = clientMap.get(uri).start();
             } catch (IOException ex) {
-                //与远程服务重建连接失败
-                throw new CokeConnectException(ConnectionExceptionEnum.RECONNECTION_WITH_REMOTE_SERVICE_FAILED);
+                if (null == connector.getHttpInvoker()) {
+                    connector.setHttpInvoker(new OkHttpsInvoker(RpcTypeEnum.okHttp3));
+                }
+                return connector.compensationExecute(instance,beanName,methodName,params);
             }
             sessionMap.put(uri,session);
-            return execute(instance,beanName,methodName,params);
+            return execute(connector,instance,beanName,methodName,params);
         }
         InvokeResult tmp = new InvokeResult();
         long start = DateUtil.current();
-        ConnectUtil.putRequestMap(requestId, tmp);
+        ConnectUtil.putRequestMap(tmp);
         ConnectUtil.threadMap.put(requestId, Thread.currentThread());
         LockSupport.park();
         InvokeResult result = ConnectUtil.getFromRequestMap(requestId);

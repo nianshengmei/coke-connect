@@ -3,6 +3,7 @@ package org.needcoke.a.configuration;
 import lombok.extern.slf4j.Slf4j;
 import org.needcoke.rpc.annotation.Call;
 import org.needcoke.rpc.annotation.Rpc;
+import org.needcoke.rpc.common.enums.RpcTypeEnum;
 import org.needcoke.rpc.invoker.SmartSocketInvoker;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -31,7 +32,7 @@ public class Config {
     }
 
     @Bean
-    public SmartSocketInvoker smartSocketInvoker(){
-        return new SmartSocketInvoker();
+    public SmartSocketInvoker smartSocketInvoker(RpcTypeEnum rpcTypeEnum){
+        return new SmartSocketInvoker(rpcTypeEnum);
     }
 }

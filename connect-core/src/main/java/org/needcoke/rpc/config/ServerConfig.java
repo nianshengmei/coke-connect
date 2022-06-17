@@ -1,6 +1,7 @@
 package org.needcoke.rpc.config;
 
 import lombok.Getter;
+import org.needcoke.rpc.common.enums.RpcTypeEnum;
 import org.needcoke.rpc.invoker.ConnectInvoker;
 import org.needcoke.rpc.invoker.OkHttpsInvoker;
 import org.needcoke.rpc.invoker.SmartSocketInvoker;
@@ -26,13 +27,16 @@ public class ServerConfig {
     @Value("${coke.server.type:http}")
     private String serverType;
 
+    @Value("${server.port}")
+    private int mvcPort;
+
     /**
      * coke-connect的默认远程调用组件为okHttps
      */
     @ConditionalOnMissingBean(ConnectInvoker.class)
     @Bean
-    public OkHttpsInvoker okHttpsInvoker(){
-        return new OkHttpsInvoker();
+    public OkHttpsInvoker okHttpsInvoker(RpcTypeEnum rpcTypeEnum){
+        return new OkHttpsInvoker(rpcTypeEnum);
     }
 
      /**
@@ -60,5 +64,10 @@ public class ServerConfig {
     @Bean
     public Map<String,Integer> cokeServerPortMap(){
         return new ConcurrentHashMap<>();
+    }
+
+    @Bean
+    public RpcTypeEnum rpcType(){
+        return RpcTypeEnum.okHttp3;
     }
 }

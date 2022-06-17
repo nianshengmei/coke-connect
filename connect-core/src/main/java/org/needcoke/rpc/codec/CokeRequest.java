@@ -28,8 +28,6 @@ public class CokeRequest {
     @Getter
     private InvokeResult result;
 
-    private Integer requestId;
-
 
     public CokeRequest setRequestType(ConnectRequestEnum requestType) {
         this.requestType = requestType;
@@ -83,8 +81,4 @@ public class CokeRequest {
         return jsonString.getBytes();
     }
 
-    public CokeRequest setRequestId(Integer requestId){
-        this.requestId = requestId;
-        return this;
-    }
 }

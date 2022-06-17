@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.needcoke.rpc.annotation.Rpc;
 import org.needcoke.rpc.invoker.InvokeResult;
 import org.needcoke.rpc.loadBalance.LoadBalance;
+import org.needcoke.rpc.net.ConnectorFactory;
 import org.needcoke.rpc.utils.ConnectUtil;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -30,11 +31,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class TestController {
 
+    private final ConnectorFactory connectorFactory;
+
     @GetMapping("test")
     public InvokeResult test(){
         Map<String,Object> map = new HashMap<>();
         map.put("word","刘勇是死废物");
-        InvokeResult execute = ConnectUtil.execute("bussiness-c", "cCon", "cTest", map);
+        InvokeResult execute = connectorFactory.connector("bussiness-c").execute( "cCon", "cTest", map);
         return execute;
     }
 
