@@ -9,7 +9,6 @@ import org.needcoke.rpc.common.enums.HttpContentTypeEnum;
 import org.needcoke.rpc.common.enums.RpcTypeEnum;
 import org.needcoke.rpc.config.RequestIdContextHolder;
 import org.needcoke.rpc.net.Connector;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -33,12 +32,11 @@ public class OkHttpsInvoker extends ConnectInvoker {
     public InvokeResult execute(Connector connector, ServiceInstance instance, String beanName, String methodName, Map<String, Object> params) {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
-        String COKE_REQUEST_ID_HEADER_ID_NAME = "COKE_REQUEST_ID";
         SHttpTask sHttpTask = HTTP.builder().addMsgConvertor(new JacksonMsgConvertor()).build()
                 .sync(instance.getUri() + ConnectConstant.EXECUTE_RELATIVE_PATH)
                 .bodyType(HttpContentTypeEnum.JSON.getValue())
                 .addBodyPara(params)
-                .addHeader(COKE_REQUEST_ID_HEADER_ID_NAME, RequestIdContextHolder.getRequestId())
+                .addHeader(ConnectConstant.COKE_REQUEST_ID_HEADER_ID_NAME, RequestIdContextHolder.getRequestId())
                 .addUrlPara(ConnectConstant.BEAN_NAME, beanName)
                 .addUrlPara(ConnectConstant.METHOD_NAME, methodName);
         Enumeration<String> headerNames = request.getHeaderNames();

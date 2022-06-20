@@ -36,4 +36,6 @@ public interface ConnectConstant {
      * 冒号 :
      */
     String COLON = ":";
+
+    String COKE_REQUEST_ID_HEADER_ID_NAME = "COKE_REQUEST_ID";
 }

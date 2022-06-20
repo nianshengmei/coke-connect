@@ -21,9 +21,8 @@ import java.util.Map;
 public class SmartSocketServerProcessor extends SmartSocketMessageProcessor<CokeRequest> {
     @Override
     public void process(AioSession session, CokeRequest request) {
-        String COKE_REQUEST_ID_HEADER_ID_NAME = "COKE_REQUEST_ID";
-        if (request.getHeaders().containsKey(COKE_REQUEST_ID_HEADER_ID_NAME)) {
-            RequestIdContextHolder.setRequestId(request.getHeaders().get(COKE_REQUEST_ID_HEADER_ID_NAME));
+        if (request.getHeaders().containsKey(ConnectConstant.COKE_REQUEST_ID_HEADER_ID_NAME)) {
+            RequestIdContextHolder.setRequestId(request.getHeaders().get(ConnectConstant.COKE_REQUEST_ID_HEADER_ID_NAME));
         } else {
             RequestIdContextHolder.setRequestId(RequestIdContextHolder.newRequestId());
         }

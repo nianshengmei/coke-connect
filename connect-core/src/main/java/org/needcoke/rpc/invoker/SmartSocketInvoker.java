@@ -10,10 +10,8 @@ import org.needcoke.rpc.common.enums.RpcTypeEnum;
 import org.needcoke.rpc.common.exception.CokeConnectException;
 import org.needcoke.rpc.config.RequestIdContextHolder;
 import org.needcoke.rpc.net.Connector;
-import org.needcoke.rpc.net.ConnectorFactory;
 import org.needcoke.rpc.processor.smart_socket.SmartSocketClientProcessor;
 import org.needcoke.rpc.utils.ConnectUtil;
-import org.needcoke.rpc.utils.SpringContextUtils;
 import org.smartboot.socket.transport.AioQuickClient;
 import org.smartboot.socket.transport.AioSession;
 import org.springframework.cloud.client.ServiceInstance;
@@ -48,7 +46,6 @@ public class SmartSocketInvoker extends ConnectInvoker {
             }
             return connector.compensationExecute(instance,beanName,methodName,params);
         }
-
         String uri = instance.getHost() + ConnectConstant.COLON + instance.getPort();
         Integer serverPort = ConnectUtil.getCokeServerPort(instance);
         if (0 == serverPort) {
@@ -66,11 +63,10 @@ public class SmartSocketInvoker extends ConnectInvoker {
         }
         AioSession session = sessionMap.get(uri);
         int requestId = ConnectUtil.requestIdMaker.addAndGet(1);
-        String COKE_REQUEST_ID_HEADER_ID_NAME = "COKE_REQUEST_ID";
         CokeRequest request = new CokeRequest().setBeanName(beanName)
                 .setMethodName(methodName)
                 .setParams(params)
-                .addHeader(COKE_REQUEST_ID_HEADER_ID_NAME, RequestIdContextHolder.getRequestId());
+                .addHeader(ConnectConstant.COKE_REQUEST_ID_HEADER_ID_NAME, RequestIdContextHolder.getRequestId());
         byte[] bytes = request.toBytes();
         try {
             session.writeBuffer().writeInt(bytes.length);
