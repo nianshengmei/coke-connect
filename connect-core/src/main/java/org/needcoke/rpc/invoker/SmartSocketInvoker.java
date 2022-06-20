@@ -2,13 +2,13 @@ package org.needcoke.rpc.invoker;
 
 import cn.hutool.core.date.DateUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.connect.rpc.link.tracking.util.TrackingUtil;
 import org.needcoke.rpc.codec.CokeRequest;
 import org.needcoke.rpc.codec.CokeRequestProtocol;
 import org.needcoke.rpc.common.constant.ConnectConstant;
 import org.needcoke.rpc.common.enums.ConnectionExceptionEnum;
 import org.needcoke.rpc.common.enums.RpcTypeEnum;
 import org.needcoke.rpc.common.exception.CokeConnectException;
-import org.needcoke.rpc.config.RequestIdContextHolder;
 import org.needcoke.rpc.net.Connector;
 import org.needcoke.rpc.processor.smart_socket.SmartSocketClientProcessor;
 import org.needcoke.rpc.utils.ConnectUtil;
@@ -62,11 +62,10 @@ public class SmartSocketInvoker extends ConnectInvoker {
             }
         }
         AioSession session = sessionMap.get(uri);
-        int requestId = ConnectUtil.requestIdMaker.addAndGet(1);
         CokeRequest request = new CokeRequest().setBeanName(beanName)
                 .setMethodName(methodName)
                 .setParams(params)
-                .addHeader(ConnectConstant.COKE_REQUEST_ID_HEADER_ID_NAME, RequestIdContextHolder.getRequestId());
+                .addHeader(TrackingUtil.headerKey(), TrackingUtil.headerValue());
         byte[] bytes = request.toBytes();
         try {
             session.writeBuffer().writeInt(bytes.length);
@@ -89,11 +88,11 @@ public class SmartSocketInvoker extends ConnectInvoker {
         InvokeResult tmp = new InvokeResult();
         long start = DateUtil.current();
         ConnectUtil.putRequestMap(tmp);
-        ConnectUtil.threadMap.put(requestId, Thread.currentThread());
+        ConnectUtil.threadMap.put(TrackingUtil.getRequestId(), Thread.currentThread());
         LockSupport.park();
-        InvokeResult result = ConnectUtil.getFromRequestMap(requestId);
+        InvokeResult result = ConnectUtil.getFromRequestMap(TrackingUtil.getRequestId());
         long end = DateUtil.current();
-        log.info("requestId = {} , start = {} , end = {} ,cost = {}", requestId, start, end, end - start);
+        log.info("requestId = {} , start = {} , end = {} ,cost = {}", TrackingUtil.getRequestId(), start, end, end - start);
         result.setTime(end - start);
         return result;
     }

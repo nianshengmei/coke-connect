@@ -1,23 +1,30 @@
 package org.needcoke.rpc.config;
 
-import cn.hutool.core.util.StrUtil;
-import org.needcoke.rpc.common.constant.ConnectConstant;
-import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.connector.RequestFacade;
+import org.connect.rpc.link.tracking.config.LinkTrackingContextHolder;
+import org.connect.rpc.link.tracking.net.LinkTracking;
+import org.connect.rpc.link.tracking.util.TrackingUtil;
+import org.needcoke.rpc.utils.SpringContextUtils;
+import org.springframework.web.servlet.HandlerInterceptor;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
-@Component
-public class CokeHandlerInterceptorAdapter extends HandlerInterceptorAdapter {
+@Slf4j
+public class CokeHandlerInterceptorAdapter implements HandlerInterceptor {
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String cokeRequestId = request.getHeader(ConnectConstant.COKE_REQUEST_ID_HEADER_ID_NAME);
-        if(StrUtil.isEmpty(cokeRequestId)){
-            RequestIdContextHolder.setRequestId(RequestIdContextHolder.newRequestId());
-        }else{
-            RequestIdContextHolder.setRequestId(cokeRequestId);
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        ServerConfig bean = SpringContextUtils.getBean(ServerConfig.class);
+        int port = bean.getMvcPort();
+        TrackingUtil.preHttp(request,response,handler,port);
+        LinkTracking linkTracking = LinkTrackingContextHolder.getLinkTracking();
+        if(request instanceof RequestFacade){
+            String requestURI = ((RequestFacade) request).getRequestURI();
+            linkTracking.addMataData("http path",requestURI);
         }
-        return super.preHandle(request, response, handler);
+        return true;
     }
 }

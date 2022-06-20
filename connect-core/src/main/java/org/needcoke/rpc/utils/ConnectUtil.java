@@ -5,9 +5,9 @@ import com.ejlchina.okhttps.HttpResult;
 import com.ejlchina.okhttps.SHttpTask;
 import com.ejlchina.okhttps.jackson.JacksonMsgConvertor;
 import lombok.extern.slf4j.Slf4j;
+import org.connect.rpc.link.tracking.util.TrackingUtil;
 import org.needcoke.rpc.common.constant.ConnectConstant;
 import org.needcoke.rpc.common.enums.HttpContentTypeEnum;
-import org.needcoke.rpc.config.RequestIdContextHolder;
 import org.needcoke.rpc.invoker.ConnectInvoker;
 import org.needcoke.rpc.invoker.InvokeResult;
 import org.needcoke.rpc.loadBalance.LoadBalance;
@@ -16,14 +16,8 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -76,16 +70,16 @@ public class ConnectUtil {
     public static final Map<String, InvokeResult> requestMap = new ConcurrentHashMap();
 
     public static void putRequestMap(InvokeResult result){
-        requestMap.put(RequestIdContextHolder.getRequestId(),result);
+        requestMap.put(TrackingUtil.getRequestId(),result);
     }
 
-    public static ConcurrentHashMap<Integer,Thread> threadMap = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<String,Thread> threadMap = new ConcurrentHashMap<>();
 
     public static void putRequestMap(String requestId,InvokeResult result){
         requestMap.put(requestId,result);
     }
 
-    public static InvokeResult getFromRequestMap(Integer key){
+    public static InvokeResult getFromRequestMap(String key){
         return requestMap.get(key);
     }
 

@@ -4,10 +4,10 @@ import com.ejlchina.okhttps.HTTP;
 import com.ejlchina.okhttps.HttpResult;
 import com.ejlchina.okhttps.SHttpTask;
 import com.ejlchina.okhttps.jackson.JacksonMsgConvertor;
+import org.connect.rpc.link.tracking.util.TrackingUtil;
 import org.needcoke.rpc.common.constant.ConnectConstant;
 import org.needcoke.rpc.common.enums.HttpContentTypeEnum;
 import org.needcoke.rpc.common.enums.RpcTypeEnum;
-import org.needcoke.rpc.config.RequestIdContextHolder;
 import org.needcoke.rpc.net.Connector;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.web.context.request.RequestAttributes;
@@ -36,7 +36,7 @@ public class OkHttpsInvoker extends ConnectInvoker {
                 .sync(instance.getUri() + ConnectConstant.EXECUTE_RELATIVE_PATH)
                 .bodyType(HttpContentTypeEnum.JSON.getValue())
                 .addBodyPara(params)
-                .addHeader(ConnectConstant.COKE_REQUEST_ID_HEADER_ID_NAME, RequestIdContextHolder.getRequestId())
+                .addHeader(TrackingUtil.headerKey(), TrackingUtil.headerValue())
                 .addUrlPara(ConnectConstant.BEAN_NAME, beanName)
                 .addUrlPara(ConnectConstant.METHOD_NAME, methodName);
         Enumeration<String> headerNames = request.getHeaderNames();

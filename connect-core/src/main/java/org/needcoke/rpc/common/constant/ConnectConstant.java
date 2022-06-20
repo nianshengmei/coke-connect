@@ -37,5 +37,5 @@ public interface ConnectConstant {
      */
     String COLON = ":";
 
-    String COKE_REQUEST_ID_HEADER_ID_NAME = "COKE_REQUEST_ID";
+    String COKE_REQUEST_ID_HEADER_ID_NAME = "COKE-LINK-TRACKING-INFO";
 }

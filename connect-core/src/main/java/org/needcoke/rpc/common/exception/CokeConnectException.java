@@ -1,8 +1,8 @@
 package org.needcoke.rpc.common.exception;
 
 import lombok.Data;
+import org.connect.rpc.link.tracking.util.TrackingUtil;
 import org.needcoke.rpc.common.enums.ConnectionExceptionEnum;
-import org.needcoke.rpc.config.RequestIdContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -42,7 +42,7 @@ public class CokeConnectException extends RuntimeException {
         super(connectionExceptionEnum.getValue(),e);
         this.errorCode = connectionExceptionEnum.getErrorCode();
         this.note = connectionExceptionEnum.getNote();
-        this.requestId = RequestIdContextHolder.getRequestId();
+        this.requestId = TrackingUtil.getRequestId();
     }
 
     public CokeConnectException(String requestId ,ConnectionExceptionEnum connectionExceptionEnum,Throwable e) {

@@ -4,8 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.Getter;
 import org.needcoke.rpc.common.enums.ConnectRequestEnum;
 import org.needcoke.rpc.invoker.InvokeResult;
-
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,6 +59,10 @@ public class CokeRequest {
     public CokeRequest setHeaders(Map<String, String> headers) {
         this.headers = headers;
         return this;
+    }
+
+    public String getHeader(String name){
+        return this.headers.get(name);
     }
 
     public CokeRequest addHeader(String name,String header) {
