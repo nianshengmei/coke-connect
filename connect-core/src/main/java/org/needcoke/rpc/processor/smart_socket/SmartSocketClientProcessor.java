@@ -1,6 +1,7 @@
 package org.needcoke.rpc.processor.smart_socket;
 
 import lombok.extern.slf4j.Slf4j;
+import org.connect.rpc.link.tracking.util.TrackingUtil;
 import org.needcoke.rpc.codec.CokeRequest;
 import org.needcoke.rpc.common.enums.ConnectRequestEnum;
 import org.needcoke.rpc.utils.ConnectUtil;
@@ -14,11 +15,10 @@ public class SmartSocketClientProcessor extends SmartSocketMessageProcessor<Coke
     public void process(AioSession aioSession, CokeRequest request) {
 
         if (ConnectRequestEnum.INTERNAL_RESPONSE == request.getRequestType()) {
-            Integer requestId = request.getRequestId();
-            log.info("smart socket client receive back requestId = {} , request json = {}",
-                    requestId,new String(request.toBytes()));
-            ConnectUtil.putRequestMap(requestId,request.getResult());
-            Thread thread = ConnectUtil.threadMap.get(requestId);
+            log.info("smart socket client receive back linkTracking = {} , request json = {}",
+                    TrackingUtil.linkTrackingJsonStr(),new String(request.toBytes()));
+            ConnectUtil.putRequestMap(TrackingUtil.getRequestId(),request.getResult());
+            Thread thread = ConnectUtil.getFromThreadMap(TrackingUtil.getRequestId());
             LockSupport.unpark(thread);
             //TODO 抛出异常
         }

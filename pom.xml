@@ -17,6 +17,7 @@
         <module>bussiness-a</module>
         <module>business-b</module>
         <module>business-c</module>
+        <module>connect-link-tracking</module>
     </modules>
 
 

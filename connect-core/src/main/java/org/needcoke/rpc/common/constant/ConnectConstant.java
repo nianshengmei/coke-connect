@@ -15,6 +15,8 @@ public interface ConnectConstant {
 
     String COKE_PORT_RELATIVE_PATH = "/coke/connect/port";
 
+    String COKE_RPC_TYPE_RELATIVE_PATH = "/coke/connect/rpcType";
+
     /**
      * 实例名称
      */
@@ -34,4 +36,6 @@ public interface ConnectConstant {
      * 冒号 :
      */
     String COLON = ":";
+
+    String COKE_REQUEST_ID_HEADER_ID_NAME = "COKE-LINK-TRACKING-INFO";
 }

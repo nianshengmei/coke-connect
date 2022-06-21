@@ -8,12 +8,12 @@ spring:
       #注册中心
       discovery:
         #server-addr: http://192.168.*:8848
-        server-addr: http://192.168.0.109:8848
+        server-addr: http://127.0.0.1:8848
         cluster-name: 严鸣是吕诗文爸爸
         group: 相亲相爱一家人
 server:
-  port: 8081
+  port: 8089
 
 coke:
   server:
-    port: 13001
+    port: 13007
