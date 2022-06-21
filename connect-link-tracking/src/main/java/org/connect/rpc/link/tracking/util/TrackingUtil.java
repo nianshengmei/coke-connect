@@ -40,7 +40,7 @@ public class TrackingUtil {
     }
 
     public String getRequestId() {
-        return LinkTrackingContextHolder.getLinkTracking().getRequestId().toString();
+        return LinkTrackingContextHolder.getLinkTracking().getRequestId();
     }
 
     public String linkTrackingJsonStr() {

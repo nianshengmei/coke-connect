@@ -1,13 +1,14 @@
 package org.connect.rpc.link.tracking.config;
 
 import com.alibaba.ttl.TransmittableThreadLocal;
+import com.alibaba.ttl.TtlRunnable;
 import lombok.experimental.UtilityClass;
 import org.connect.rpc.link.tracking.net.LinkTracking;
 
 @UtilityClass
 public class LinkTrackingContextHolder {
 
-    private final ThreadLocal<LinkTracking> THREAD_LOCAL_LINK_TRACKING = new TransmittableThreadLocal<>();
+    private final TransmittableThreadLocal<LinkTracking> THREAD_LOCAL_LINK_TRACKING = new TransmittableThreadLocal<>();
 
     public void setLinkTracking(LinkTracking tracking) {
         THREAD_LOCAL_LINK_TRACKING.set(tracking);

@@ -67,20 +67,28 @@ public class ConnectUtil {
 
     public static final AtomicInteger requestIdMaker = new AtomicInteger();
 
-    public static final Map<String, InvokeResult> requestMap = new ConcurrentHashMap();
+    private static final Map<String, InvokeResult> requestMap = new ConcurrentHashMap();
 
     public static void putRequestMap(InvokeResult result){
         requestMap.put(TrackingUtil.getRequestId(),result);
     }
 
-    public static ConcurrentHashMap<String,Thread> threadMap = new ConcurrentHashMap<>();
+    private static Map<String,Thread> threadMap = new ConcurrentHashMap<>();
 
     public static void putRequestMap(String requestId,InvokeResult result){
         requestMap.put(requestId,result);
     }
 
     public static InvokeResult getFromRequestMap(String key){
-        return requestMap.get(key);
+        return requestMap.remove(key);
+    }
+
+    public static void putThreadMap(String requestId,Thread thread){
+        threadMap.put(requestId,thread);
+    }
+
+    public static Thread getFromThreadMap(String requestId){
+        return threadMap.remove(requestId);
     }
 
     /**

@@ -20,6 +20,7 @@ import org.needcoke.rpc.utils.SpringContextUtils;
 import org.smartboot.socket.StateMachineEnum;
 import org.smartboot.socket.transport.AioSession;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -63,6 +64,9 @@ public class SmartSocketServerProcessor extends SmartSocketMessageProcessor<Coke
                 this.response(session, request.setRequestType(ConnectRequestEnum.INTERNAL_RESPONSE).setResult(invokeResult));
             } catch (Exception e) {
                 log.error(ConnectionExceptionEnum.INVOKE_METHOD_ERROR.logStatement(ConnectConstant.EXECUTE_RELATIVE_PATH));
+                if(e instanceof InvocationTargetException){
+                    ((InvocationTargetException) e).getTargetException().printStackTrace();
+                }
                 throw new CokeConnectException(ConnectionExceptionEnum.INVOKE_METHOD_ERROR, e);
             }
         }

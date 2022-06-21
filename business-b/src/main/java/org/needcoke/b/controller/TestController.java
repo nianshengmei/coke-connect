@@ -37,7 +37,7 @@ public class TestController {
     public InvokeResult test(){
         Map<String,Object> map = new HashMap<>();
         map.put("word","刘勇是死废物");
-        InvokeResult execute = connectorFactory.connector("bussiness-c").execute( "cCon", "cTest", map);
+        InvokeResult execute = connectorFactory.connector("bussiness-c").execute( "cCon", "cTest2", map);
         return execute;
     }
 

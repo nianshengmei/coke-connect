@@ -2,6 +2,7 @@ package org.connect.rpc.link.tracking.net;
 
 import cn.hutool.core.collection.CollUtil;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.net.InetAddress;
@@ -11,6 +12,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Data
+@EqualsAndHashCode
 @Accessors(chain = true)
 public class LinkTracking {
     private String ip;
@@ -19,7 +21,7 @@ public class LinkTracking {
 
     private Map<String,String> metaData;
 
-    private Long requestId;
+    private String requestId;
 
     private Integer index;
 
@@ -30,7 +32,7 @@ public class LinkTracking {
     public LinkTracking(int port) {
        this.port = port;
        changeIp();
-       requestId = requestIdMaker.getAndAdd(1);
+       requestId = ""+requestIdMaker.getAndAdd(1);
        this.index = 1;
     }
 

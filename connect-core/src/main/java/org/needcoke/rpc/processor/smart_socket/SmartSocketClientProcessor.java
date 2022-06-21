@@ -18,7 +18,7 @@ public class SmartSocketClientProcessor extends SmartSocketMessageProcessor<Coke
             log.info("smart socket client receive back linkTracking = {} , request json = {}",
                     TrackingUtil.linkTrackingJsonStr(),new String(request.toBytes()));
             ConnectUtil.putRequestMap(TrackingUtil.getRequestId(),request.getResult());
-            Thread thread = ConnectUtil.threadMap.get(TrackingUtil.getRequestId());
+            Thread thread = ConnectUtil.getFromThreadMap(TrackingUtil.getRequestId());
             LockSupport.unpark(thread);
             //TODO 抛出异常
         }

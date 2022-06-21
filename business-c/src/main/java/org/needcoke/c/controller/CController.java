@@ -6,7 +6,6 @@ import org.needcoke.rpc.common.enums.RpcTypeEnum;
 import org.needcoke.rpc.invoker.InvokeResult;
 import org.needcoke.rpc.invoker.SmartSocketInvoker;
 import org.needcoke.rpc.net.ConnectorFactory;
-import org.needcoke.rpc.utils.ConnectUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +25,7 @@ public class CController {
     @Resource
     private ConnectorFactory connectorFactory;
 
-    @Call("cTest")
+    @Call("cTest2")
     public String cTest(String word){
         Map<String,Object> map = new HashMap<>();
         map.put("word",word);
