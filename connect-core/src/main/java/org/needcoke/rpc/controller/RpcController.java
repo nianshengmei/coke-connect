@@ -10,7 +10,6 @@ import org.needcoke.rpc.common.enums.RpcTypeEnum;
 import org.needcoke.rpc.common.exception.CokeConnectException;
 import org.needcoke.rpc.config.ServerConfig;
 import org.needcoke.rpc.invoker.OkHttpsInvoker;
-import org.needcoke.rpc.invoker.SmartSocketInvoker;
 import org.needcoke.rpc.utils.SpringContextUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -59,29 +58,5 @@ public class RpcController {
             log.error(ConnectionExceptionEnum.INVOKE_METHOD_ERROR.logStatement(ConnectConstant.EXECUTE_RELATIVE_PATH));
             throw new CokeConnectException(ConnectionExceptionEnum.INVOKE_METHOD_ERROR);
         }
-    }
-
-    @GetMapping("port")
-    public Integer cokeServerPort() {
-        if (null == serverConfig) {
-            return 0;
-        }
-        try{
-            applicationContext.getBean(OkHttpsInvoker.class);
-        }catch (Exception e){
-            return serverConfig.getCokeServerPort();
-
-        }
-        return 0;
-    }
-
-    @GetMapping("rpcType")
-    public RpcTypeEnum getRpcType(){
-        try {
-            SmartSocketInvoker bean = applicationContext.getBean(SmartSocketInvoker.class);
-        }catch (Exception e){
-            return RpcTypeEnum.okHttp3;
-        }
-        return  RpcTypeEnum.smartSocket;
     }
 }

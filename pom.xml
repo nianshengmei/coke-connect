@@ -18,6 +18,8 @@
         <module>business-b</module>
         <module>business-c</module>
         <module>connect-link-tracking</module>
+        <module>connect-server-netty</module>
+        <module>connect-server-smart-socket</module>
     </modules>
 
 

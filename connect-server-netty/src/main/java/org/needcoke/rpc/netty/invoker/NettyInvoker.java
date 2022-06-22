@@ -1,88 +1,75 @@
-package org.needcoke.rpc.invoker;
+package org.needcoke.rpc.netty.invoker;
 
 import cn.hutool.core.date.DateUtil;
+import io.netty.channel.Channel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.connect.rpc.link.tracking.util.TrackingUtil;
 import org.needcoke.rpc.codec.CokeRequest;
-import org.needcoke.rpc.codec.CokeRequestProtocol;
 import org.needcoke.rpc.common.constant.ConnectConstant;
 import org.needcoke.rpc.common.enums.ConnectionExceptionEnum;
 import org.needcoke.rpc.common.enums.RpcTypeEnum;
 import org.needcoke.rpc.common.exception.CokeConnectException;
+import org.needcoke.rpc.invoker.ConnectInvoker;
+import org.needcoke.rpc.invoker.InvokeResult;
+import org.needcoke.rpc.invoker.OkHttpsInvoker;
 import org.needcoke.rpc.net.Connector;
-import org.needcoke.rpc.processor.smart_socket.SmartSocketClientProcessor;
+import org.needcoke.rpc.netty.client.NettyClient;
 import org.needcoke.rpc.utils.ConnectUtil;
-import org.smartboot.socket.transport.AioQuickClient;
-import org.smartboot.socket.transport.AioSession;
 import org.springframework.cloud.client.ServiceInstance;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.LockSupport;
 
 @Slf4j
-public class SmartSocketInvoker extends ConnectInvoker {
+@NoArgsConstructor
+public class NettyInvoker extends ConnectInvoker {
 
-    private RpcTypeEnum rpcTypeEnum;
+    private final Map<String, NettyClient> clientMap = new ConcurrentHashMap<>();
 
-    public SmartSocketInvoker(RpcTypeEnum rpcTypeEnum) {
-        this.rpcTypeEnum = rpcTypeEnum;
-    }
-
-    /**
-     * 给AioQuickClient加个引用，防止垃圾回收。
-     */
-    private final Map<String, AioQuickClient> clientMap = new ConcurrentHashMap<>();
-
-    private final Map<String, AioSession> sessionMap = new ConcurrentHashMap<>();
-
+    private final Map<String, Channel> channelMap = new ConcurrentHashMap<>();
     @Override
     public InvokeResult execute(Connector connector, ServiceInstance instance, String beanName, String methodName, Map<String, Object> params) {
-        RpcTypeEnum remoteRpcType = getRemoteRpcType(instance);
-        if(remoteRpcType == RpcTypeEnum.okHttp3){
-            if (null == connector.getHttpInvoker()) {
-                connector.setHttpInvoker(new OkHttpsInvoker(RpcTypeEnum.okHttp3));
-            }
-            return connector.compensationExecute(instance,beanName,methodName,params);
+        InvokeResult res = runDefaultExecute(connector, instance, beanName, methodName, params);
+        if(null != res){
+            return res;
         }
         String uri = instance.getHost() + ConnectConstant.COLON + instance.getPort();
-        Integer serverPort = ConnectUtil.getCokeServerPort(instance);
+        Integer serverPort = connector.getServerPort(instance);
         if (0 == serverPort) {
             throw new CokeConnectException(ConnectionExceptionEnum.REMOTE_SERVICE_DOES_NOT_OPEN_THE_COKE_SERVICE_PORT);
         }
-        if (!sessionMap.containsKey(uri)) {
-            AioQuickClient aioQuickClient = new AioQuickClient(instance.getHost(), serverPort, new CokeRequestProtocol(), new SmartSocketClientProcessor());
-            clientMap.put(uri, aioQuickClient);
+        if (!channelMap.containsKey(uri)) {
+            NettyClient nettyClient = new NettyClient(instance.getHost(), serverPort);
+            clientMap.put(uri, nettyClient);
             try {
-                AioSession session = aioQuickClient.start();
-                sessionMap.put(uri, session);
-            } catch (IOException e) {
-                throw new CokeConnectException(ConnectionExceptionEnum.CONNECTION_WITH_REMOTE_SERVICE_FAILED);
+                Channel channel = nettyClient.start();
+                channelMap.put(uri, channel);
+            }  catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         }
-        AioSession session = sessionMap.get(uri);
+        Channel channel = channelMap.get(uri);
         CokeRequest request = new CokeRequest().setBeanName(beanName)
                 .setMethodName(methodName)
                 .setParams(params)
                 .addHeader(TrackingUtil.headerKey(), TrackingUtil.headerValue());
         byte[] bytes = request.toBytes();
         try {
-            session.writeBuffer().writeInt(bytes.length);
-            session.writeBuffer().write(bytes);
-            session.writeBuffer().flush();
-        } catch (IOException e) {
-            //一般是session失效了
+            channel.writeAndFlush(request);
+        } catch (Exception e) {
+            //一般是channel close失效了
             log.error(e.getMessage());
             try {
-                session = clientMap.get(uri).start();
-            } catch (IOException ex) {
+                channel = clientMap.get(uri).start();
+            } catch (InterruptedException ex) {
                 if (null == connector.getHttpInvoker()) {
-                    connector.setHttpInvoker(new OkHttpsInvoker(RpcTypeEnum.okHttp3));
+                    connector.setHttpInvoker(new OkHttpsInvoker());
                 }
                 return connector.compensationExecute(instance,beanName,methodName,params);
             }
-            sessionMap.put(uri,session);
+            channelMap.put(uri,channel);
             return execute(connector,instance,beanName,methodName,params);
         }
         InvokeResult tmp = new InvokeResult();

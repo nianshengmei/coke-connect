@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 @UtilityClass
 public class TrackingUtil {
 
-    private Gson gson = new Gson();
+    private final Gson gson = new Gson();
     public void preHttp(HttpServletRequest request, HttpServletResponse response, Object handler, int port) {
         String cokeRequestIdJson = request.getHeader(CommonConstant.COKE_REQUEST_ID_HEADER_ID_NAME);
         if (StrUtil.isEmpty(cokeRequestIdJson)) {

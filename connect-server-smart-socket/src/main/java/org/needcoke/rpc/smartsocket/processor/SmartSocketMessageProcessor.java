@@ -1,4 +1,4 @@
-package org.needcoke.rpc.processor.smart_socket;
+package org.needcoke.rpc.smartsocket.processor;
 
 import org.needcoke.rpc.codec.CokeRequest;
 import org.needcoke.rpc.invoker.InvokeResult;

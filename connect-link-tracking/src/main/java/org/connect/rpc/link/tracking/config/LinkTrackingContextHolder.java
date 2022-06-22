@@ -1,7 +1,6 @@
 package org.connect.rpc.link.tracking.config;
 
 import com.alibaba.ttl.TransmittableThreadLocal;
-import com.alibaba.ttl.TtlRunnable;
 import lombok.experimental.UtilityClass;
 import org.connect.rpc.link.tracking.net.LinkTracking;
 

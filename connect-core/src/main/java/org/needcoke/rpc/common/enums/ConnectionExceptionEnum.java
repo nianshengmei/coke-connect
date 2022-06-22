@@ -23,6 +23,10 @@ public enum ConnectionExceptionEnum {
     RECONNECTION_WITH_REMOTE_SERVICE_FAILED("0006","reconnection with remote service failed","与远程服务重建连接失败"),
 
     CONNECTION_WITH_REMOTE_SERVICE_FAILED("0007","reconnection with remote service failed","与远程服务重建连接失败"),
+
+    THE_FORMAT_OF_THE_REMOTE_SERVICE_PORT_NUMBER_IS_INCORRECT_PLEASE_CHECK_THE_CONFIGURATION_OF_THE_REMOTE_SERVICE_PORT_NUMBER
+            ("0008","The format of the remote service port number is incorrect. Please check the configuration of the remote service port number",
+                    "远程服务端口号格式错误，请检查远程服务端口号配置")
     ;
     private final String code;
 

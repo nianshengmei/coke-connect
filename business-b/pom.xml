@@ -37,6 +37,17 @@
             <artifactId>nacos-common</artifactId>
             <version>1.4.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.needcoke</groupId>
+            <artifactId>connect-server-smart-socket</artifactId>
+            <version>abandon</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.needcoke</groupId>
+            <artifactId>connect-server-netty</artifactId>
+            <version>abandon</version>
+        </dependency>
     </dependencies>
 
 </project>
