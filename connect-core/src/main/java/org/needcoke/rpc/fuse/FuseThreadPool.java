@@ -2,29 +2,25 @@ package org.needcoke.rpc.fuse;
 
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import org.needcoke.rpc.config.FuseConfig;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.concurrent.*;
 
 @Component
 public class FuseThreadPool {
 
+    @Resource
+    private FuseConfig fuseConfig;
+
     /**
      * 自定义线程名称,方便的出错的时候溯源
      */
-    private ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("coke-connect-Fuse-pool-%d").build();
+    private final ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("coke-connect-Fuse-pool-%d").build();
 
 
-    private int iocCoreThreadPoolSize = 2;
 
-
-    private int iocMaximumPoolSize = 4;
-
-
-    private long iocKeepAliveTime = 2000;
-
-
-    private int iocPoolCapacity = 9999;
 
 
     /**
@@ -37,11 +33,11 @@ public class FuseThreadPool {
      * handler         拒绝策略类,当线程池数量达到上线并且workQueue队列长度达到上限时就需要对到来的任务做拒绝处理
      */
     private ExecutorService service = new ThreadPoolExecutor(
-            iocCoreThreadPoolSize,
-            iocMaximumPoolSize,
-            iocKeepAliveTime,
+            fuseConfig.getCoreThreadPoolSize(),
+            fuseConfig.getMaximumPoolSize(),
+            fuseConfig.getKeepAliveTime(),
             TimeUnit.MILLISECONDS,
-            new ArrayBlockingQueue<>(iocPoolCapacity),
+            new ArrayBlockingQueue<>(fuseConfig.getPoolCapacity()),
             namedThreadFactory,
             new ThreadPoolExecutor.AbortPolicy()
     );

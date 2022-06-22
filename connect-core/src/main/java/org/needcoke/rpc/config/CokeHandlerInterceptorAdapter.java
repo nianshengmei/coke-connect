@@ -22,9 +22,15 @@ public class CokeHandlerInterceptorAdapter implements HandlerInterceptor {
         TrackingUtil.preHttp(request,response,handler,port);
         LinkTracking linkTracking = LinkTrackingContextHolder.getLinkTracking();
         if(request instanceof RequestFacade){
-            String requestURI = ((RequestFacade) request).getRequestURI();
+            String requestURI = request.getRequestURI();
             linkTracking.addMataData("http path",requestURI);
         }
         return true;
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        LinkTrackingContextHolder.clear();
+        HandlerInterceptor.super.afterCompletion(request, response, handler, ex);
     }
 }

@@ -1,5 +1,6 @@
 package org.needcoke.rpc.smartsocket.processor;
 
+import org.connect.rpc.link.tracking.config.LinkTrackingContextHolder;
 import org.needcoke.rpc.codec.CokeRequest;
 import org.needcoke.rpc.invoker.InvokeResult;
 import org.smartboot.socket.MessageProcessor;
@@ -21,6 +22,7 @@ public abstract class SmartSocketMessageProcessor<T> implements MessageProcessor
             throw new RuntimeException(e);
             // TODO 未来需要处理返回失败的场景
         }
+        LinkTrackingContextHolder.clear();
     }
 
     public void response(AioSession session, CokeRequest response){
@@ -33,6 +35,7 @@ public abstract class SmartSocketMessageProcessor<T> implements MessageProcessor
         } catch (IOException e) {
             e.printStackTrace();
         }
+        LinkTrackingContextHolder.clear();
     }
 
 }

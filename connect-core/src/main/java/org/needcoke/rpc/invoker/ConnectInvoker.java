@@ -4,15 +4,33 @@ import com.alibaba.fastjson.JSONObject;
 import com.ejlchina.okhttps.HttpResult;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.connect.rpc.link.tracking.util.TrackingUtil;
 import org.needcoke.rpc.common.enums.RpcTypeEnum;
+import org.needcoke.rpc.config.FuseConfig;
+import org.needcoke.rpc.fuse.Fuse;
+import org.needcoke.rpc.fuse.FuseTask;
+import org.needcoke.rpc.fuse.FuseThreadPool;
 import org.needcoke.rpc.net.Connector;
+import org.needcoke.rpc.utils.SpringContextUtils;
 import org.springframework.cloud.client.ServiceInstance;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.DelayQueue;
 
 @Slf4j
-@NoArgsConstructor
 public abstract class ConnectInvoker {
+
+    private DelayQueue<FuseTask> fuseTaskDelayQueue;
+
+    private FuseConfig fuseConfig;
+
+    private FuseThreadPool fuseThreadPool;
+
+    public ConnectInvoker() {
+        this.fuseTaskDelayQueue = SpringContextUtils.getBean("fuseTaskDelayQueue");
+        this.fuseConfig = SpringContextUtils.getBean("fuseConfig");
+        this.fuseThreadPool = SpringContextUtils.getBean("fuseThreadPool");
+    }
 
     public abstract InvokeResult execute(Connector connector, ServiceInstance instance, String beanName, String methodName, Map<String, Object> params);
 
@@ -39,5 +57,15 @@ public abstract class ConnectInvoker {
             return connector.compensationExecute(instance,beanName,methodName,params);
         }
         return null;
+    }
+
+    protected void fuse(){
+        fuseTaskDelayQueue.put(
+                new FuseTask(TrackingUtil.getRequestId(),
+                        Thread.currentThread(),
+                        fuseConfig.getFuseTimeOut()
+                )
+        );
+        fuseThreadPool.newTask(new Fuse(fuseTaskDelayQueue));
     }
 }

@@ -3,6 +3,7 @@ package org.needcoke.rpc.smartsocket.invoker;
 import cn.hutool.core.date.DateUtil;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.connect.rpc.link.tracking.config.LinkTrackingContextHolder;
 import org.connect.rpc.link.tracking.util.TrackingUtil;
 import org.needcoke.rpc.codec.CokeRequest;
 import org.needcoke.rpc.smartsocket.codec.CokeRequestProtocol;
@@ -87,6 +88,7 @@ public class SmartSocketInvoker extends ConnectInvoker {
         ConnectUtil.putThreadMap(TrackingUtil.getRequestId(), Thread.currentThread());
         LockSupport.park();
         InvokeResult result = ConnectUtil.getFromRequestMap(TrackingUtil.getRequestId());
+        LinkTrackingContextHolder.clear();
         long end = DateUtil.current();
         log.info("requestId = {} , start = {} , end = {} ,cost = {}", TrackingUtil.getRequestId(), start, end, end - start);
         result.setTime(end - start);

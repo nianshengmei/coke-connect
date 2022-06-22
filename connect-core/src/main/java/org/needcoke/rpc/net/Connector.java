@@ -13,7 +13,6 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class Connector {
 

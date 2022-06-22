@@ -18,7 +18,9 @@ public class ReadMessageClientProcessor implements ReadMessageProcessor{
                     TrackingUtil.linkTrackingJsonStr(), new String(request.toBytes()));
             ConnectUtil.putRequestMap(request.getCokeRequestId(), request.getResult());
             Thread thread = ConnectUtil.getFromThreadMap(request.getCokeRequestId());
-            LockSupport.unpark(thread);
+            if(thread.getState().equals(Thread.State.WAITING)) {
+                LockSupport.unpark(thread);
+            }
         }
     }
 }
