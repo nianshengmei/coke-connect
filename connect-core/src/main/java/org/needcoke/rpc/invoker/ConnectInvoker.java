@@ -12,7 +12,12 @@ import org.needcoke.rpc.fuse.FuseTask;
 import org.needcoke.rpc.fuse.FuseThreadPool;
 import org.needcoke.rpc.net.Connector;
 import org.needcoke.rpc.utils.SpringContextUtils;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.context.annotation.Lazy;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.DelayQueue;
@@ -20,17 +25,15 @@ import java.util.concurrent.DelayQueue;
 @Slf4j
 public abstract class ConnectInvoker {
 
+    @Resource
     private DelayQueue<FuseTask> fuseTaskDelayQueue;
 
+    @Resource
     private FuseConfig fuseConfig;
 
+    @Resource
+    @Lazy
     private FuseThreadPool fuseThreadPool;
-
-    public ConnectInvoker() {
-        this.fuseTaskDelayQueue = SpringContextUtils.getBean("fuseTaskDelayQueue");
-        this.fuseConfig = SpringContextUtils.getBean("fuseConfig");
-        this.fuseThreadPool = SpringContextUtils.getBean("fuseThreadPool");
-    }
 
     public abstract InvokeResult execute(Connector connector, ServiceInstance instance, String beanName, String methodName, Map<String, Object> params);
 

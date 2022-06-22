@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Getter
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class ServerConfig {
 
     @Value("${coke.server.port:12001}")
@@ -32,29 +32,30 @@ public class ServerConfig {
      */
     @ConditionalOnMissingBean(ConnectInvoker.class)
     @Bean
-    public OkHttpsInvoker okHttpsInvoker(){
+    public OkHttpsInvoker okHttpsInvoker() {
         return new OkHttpsInvoker();
     }
 
-     /**
-      *  coke-connect的默认负载均衡策略为轮询
-      */
+    /**
+     * coke-connect的默认负载均衡策略为轮询
+     */
     @ConditionalOnMissingBean(LoadBalance.class)
     @Bean
-    public RoundRobinLoadBalance roundRobinLoadBalance(){
+    public RoundRobinLoadBalance roundRobinLoadBalance() {
         return new RoundRobinLoadBalance();
     }
+
     /**
      * server uri -> 端口号
      */
     @ConditionalOnMissingBean(OkHttpsInvoker.class)
     @Bean
-    public Map<String,Integer> cokeServerPortMap(){
+    public Map<String, Integer> cokeServerPortMap() {
         return new ConcurrentHashMap<>();
     }
 
     @Bean
-    public RpcTypeEnum rpcType(){
+    public RpcTypeEnum rpcType() {
         return RpcTypeEnum.okHttp3;
     }
 }

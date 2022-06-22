@@ -6,6 +6,7 @@ import org.needcoke.rpc.loadBalance.LoadBalance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,6 +26,7 @@ public class ConnectorFactory {
         this.lb = lb;
     }
     @Autowired
+    @Lazy
     public void setCi(ConnectInvoker ci) {
         this.ci = ci;
     }

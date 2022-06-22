@@ -3,8 +3,10 @@ package org.needcoke.rpc.fuse;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.needcoke.rpc.config.FuseConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.concurrent.*;
 
@@ -13,6 +15,7 @@ public class FuseThreadPool {
 
     @Resource
     private FuseConfig fuseConfig;
+
 
     /**
      * 自定义线程名称,方便的出错的时候溯源
@@ -32,15 +35,20 @@ public class FuseThreadPool {
      * threadFactory   创建线程的工厂类
      * handler         拒绝策略类,当线程池数量达到上线并且workQueue队列长度达到上限时就需要对到来的任务做拒绝处理
      */
-    private ExecutorService service = new ThreadPoolExecutor(
-            fuseConfig.getCoreThreadPoolSize(),
-            fuseConfig.getMaximumPoolSize(),
-            fuseConfig.getKeepAliveTime(),
-            TimeUnit.MILLISECONDS,
-            new ArrayBlockingQueue<>(fuseConfig.getPoolCapacity()),
-            namedThreadFactory,
-            new ThreadPoolExecutor.AbortPolicy()
-    );
+    private ExecutorService service =  null;
+
+    @PostConstruct
+    public void init() {
+        new ThreadPoolExecutor(
+                fuseConfig.getCoreThreadPoolSize(),
+                fuseConfig.getMaximumPoolSize(),
+                fuseConfig.getKeepAliveTime(),
+                TimeUnit.MILLISECONDS,
+                new ArrayBlockingQueue<>(fuseConfig.getPoolCapacity()),
+                namedThreadFactory,
+                new ThreadPoolExecutor.AbortPolicy()
+        );
+    }
 
     /**
      * 获取线程池
