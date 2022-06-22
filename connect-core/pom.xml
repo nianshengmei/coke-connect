@@ -38,12 +38,6 @@
             <artifactId>slf4j-api</artifactId>
             <version>1.7.16</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.smartboot.http</groupId>
-            <artifactId>smart-http-client</artifactId>
-            <version>1.1.12</version>
-        </dependency>
         <dependency>
             <groupId>com.ejlchina</groupId>
             <artifactId>okhttps-jackson</artifactId>

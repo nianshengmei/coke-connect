@@ -5,6 +5,7 @@ import com.ejlchina.okhttps.HTTP;
 import com.ejlchina.okhttps.HttpResult;
 import com.ejlchina.okhttps.SHttpTask;
 import com.ejlchina.okhttps.jackson.JacksonMsgConvertor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.needcoke.rpc.common.constant.ConnectConstant;
 import org.needcoke.rpc.common.enums.HttpContentTypeEnum;
@@ -15,7 +16,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
+@NoArgsConstructor
 public abstract class ConnectInvoker {
+
+    private RpcTypeEnum rpcTypeEnum;
+
+    public ConnectInvoker(RpcTypeEnum rpcTypeEnum) {
+        this.rpcTypeEnum = rpcTypeEnum;
+    }
 
     public abstract InvokeResult execute(Connector connector, ServiceInstance instance, String beanName, String methodName, Map<String, Object> params);
 
@@ -48,5 +56,16 @@ public abstract class ConnectInvoker {
         RpcTypeEnum rpcTypeEnum = result.getBody().toBean(RpcTypeEnum.class);
         remoteRpcTypeMap.put(instance, rpcTypeEnum);
         return rpcTypeEnum;
+    }
+
+    protected InvokeResult runDefaultExecute(Connector connector, ServiceInstance instance, String beanName, String methodName, Map<String, Object> params){
+        RpcTypeEnum remoteRpcType = getRemoteRpcType(instance);
+        if(remoteRpcType == RpcTypeEnum.okHttp3){
+            if (null == connector.getHttpInvoker()) {
+                connector.setHttpInvoker(new OkHttpsInvoker(RpcTypeEnum.okHttp3));
+            }
+            return connector.compensationExecute(instance,beanName,methodName,params);
+        }
+        return null;
     }
 }

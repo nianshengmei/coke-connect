@@ -1,16 +1,20 @@
-package org.needcoke.rpc.invoker;
+package org.needcoke.rpc.smartsocket.Invoker;
 
 import cn.hutool.core.date.DateUtil;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.connect.rpc.link.tracking.util.TrackingUtil;
 import org.needcoke.rpc.codec.CokeRequest;
-import org.needcoke.rpc.codec.CokeRequestProtocol;
+import org.needcoke.rpc.smartsocket.codec.CokeRequestProtocol;
 import org.needcoke.rpc.common.constant.ConnectConstant;
 import org.needcoke.rpc.common.enums.ConnectionExceptionEnum;
 import org.needcoke.rpc.common.enums.RpcTypeEnum;
 import org.needcoke.rpc.common.exception.CokeConnectException;
+import org.needcoke.rpc.invoker.ConnectInvoker;
+import org.needcoke.rpc.invoker.InvokeResult;
+import org.needcoke.rpc.invoker.OkHttpsInvoker;
 import org.needcoke.rpc.net.Connector;
-import org.needcoke.rpc.processor.smart_socket.SmartSocketClientProcessor;
+import org.needcoke.rpc.smartsocket.processor.SmartSocketClientProcessor;
 import org.needcoke.rpc.utils.ConnectUtil;
 import org.smartboot.socket.transport.AioQuickClient;
 import org.smartboot.socket.transport.AioSession;
@@ -22,13 +26,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.LockSupport;
 
 @Slf4j
+@NoArgsConstructor
 public class SmartSocketInvoker extends ConnectInvoker {
-
-    private RpcTypeEnum rpcTypeEnum;
-
-    public SmartSocketInvoker(RpcTypeEnum rpcTypeEnum) {
-        this.rpcTypeEnum = rpcTypeEnum;
-    }
 
     /**
      * 给AioQuickClient加个引用，防止垃圾回收。
@@ -37,14 +36,17 @@ public class SmartSocketInvoker extends ConnectInvoker {
 
     private final Map<String, AioSession> sessionMap = new ConcurrentHashMap<>();
 
+    public SmartSocketInvoker(RpcTypeEnum rpcTypeEnum) {
+        super(rpcTypeEnum);
+    }
+
+
+
     @Override
     public InvokeResult execute(Connector connector, ServiceInstance instance, String beanName, String methodName, Map<String, Object> params) {
-        RpcTypeEnum remoteRpcType = getRemoteRpcType(instance);
-        if(remoteRpcType == RpcTypeEnum.okHttp3){
-            if (null == connector.getHttpInvoker()) {
-                connector.setHttpInvoker(new OkHttpsInvoker(RpcTypeEnum.okHttp3));
-            }
-            return connector.compensationExecute(instance,beanName,methodName,params);
+        InvokeResult res = runDefaultExecute(connector, instance, beanName, methodName, params);
+        if(null != res){
+            return res;
         }
         String uri = instance.getHost() + ConnectConstant.COLON + instance.getPort();
         Integer serverPort = ConnectUtil.getCokeServerPort(instance);

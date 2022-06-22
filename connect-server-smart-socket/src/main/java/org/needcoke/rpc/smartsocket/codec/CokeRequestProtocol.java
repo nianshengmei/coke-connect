@@ -1,6 +1,7 @@
-package org.needcoke.rpc.codec;
+package org.needcoke.rpc.smartsocket.codec;
 
 import com.alibaba.fastjson.JSONObject;
+import org.needcoke.rpc.codec.CokeRequest;
 import org.smartboot.socket.Protocol;
 import org.smartboot.socket.transport.AioSession;
 

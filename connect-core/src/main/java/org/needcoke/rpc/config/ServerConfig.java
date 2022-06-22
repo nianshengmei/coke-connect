@@ -4,12 +4,9 @@ import lombok.Getter;
 import org.needcoke.rpc.common.enums.RpcTypeEnum;
 import org.needcoke.rpc.invoker.ConnectInvoker;
 import org.needcoke.rpc.invoker.OkHttpsInvoker;
-import org.needcoke.rpc.invoker.SmartSocketInvoker;
 import org.needcoke.rpc.loadBalance.LoadBalance;
 import org.needcoke.rpc.loadBalance.RoundRobinLoadBalance;
-import org.needcoke.rpc.server.SmartSocketServer;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,16 +44,6 @@ public class ServerConfig {
     public RoundRobinLoadBalance roundRobinLoadBalance(){
         return new RoundRobinLoadBalance();
     }
-
-    /**
-     *  当远程调用方式修改为SmartSocketInvoker时启动SmartSocketServer
-     */
-    @ConditionalOnBean(SmartSocketInvoker.class)
-    @Bean
-    public SmartSocketServer smartSocketServer(){
-        return  new SmartSocketServer();
-    }
-
     /**
      * server uri -> 端口号
      */

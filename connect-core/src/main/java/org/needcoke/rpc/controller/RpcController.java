@@ -10,7 +10,6 @@ import org.needcoke.rpc.common.enums.RpcTypeEnum;
 import org.needcoke.rpc.common.exception.CokeConnectException;
 import org.needcoke.rpc.config.ServerConfig;
 import org.needcoke.rpc.invoker.OkHttpsInvoker;
-import org.needcoke.rpc.invoker.SmartSocketInvoker;
 import org.needcoke.rpc.utils.SpringContextUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -78,10 +77,10 @@ public class RpcController {
     @GetMapping("rpcType")
     public RpcTypeEnum getRpcType(){
         try {
-            SmartSocketInvoker bean = applicationContext.getBean(SmartSocketInvoker.class);
+            OkHttpsInvoker bean = applicationContext.getBean(OkHttpsInvoker.class);
         }catch (Exception e){
-            return RpcTypeEnum.okHttp3;
+            return RpcTypeEnum.smartSocket;
         }
-        return  RpcTypeEnum.smartSocket;
+        return  RpcTypeEnum.okHttp3;
     }
 }
