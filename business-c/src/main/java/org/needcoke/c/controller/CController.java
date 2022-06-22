@@ -2,9 +2,14 @@ package org.needcoke.c.controller;
 
 import org.needcoke.rpc.annotation.Call;
 import org.needcoke.rpc.annotation.Rpc;
+import org.needcoke.rpc.common.enums.RpcTypeEnum;
 import org.needcoke.rpc.invoker.InvokeResult;
-import org.needcoke.rpc.invoker.SmartSocketInvoker;
 import org.needcoke.rpc.net.ConnectorFactory;
+import org.needcoke.rpc.netty.invoker.NettyInvoker;
+import org.needcoke.rpc.netty.server.NettyServer;
+import org.needcoke.rpc.smartsocket.invoker.SmartSocketInvoker;
+import org.needcoke.rpc.smartsocket.server.SmartSocketServer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -15,10 +20,15 @@ import java.util.Map;
 @Rpc
 public class CController {
 
-//    @Bean
-//    public SmartSocketInvoker smartSocketInvoker(RpcTypeEnum rpcTypeEnum){
-//        return new SmartSocketInvoker(rpcTypeEnum);
-//    }
+    @Bean
+    public NettyInvoker nettyInvoker(RpcTypeEnum rpcTypeEnum){
+        return new NettyInvoker(rpcTypeEnum);
+    }
+
+    @Bean
+    public NettyServer nettyServer(){
+        return new NettyServer();
+    }
 
     @Resource
     private ConnectorFactory connectorFactory;

@@ -1,6 +1,11 @@
 package org.needcoke.b.component;
 
-import org.needcoke.rpc.invoker.SmartSocketInvoker;
+import org.needcoke.rpc.common.enums.RpcTypeEnum;
+import org.needcoke.rpc.netty.invoker.NettyInvoker;
+import org.needcoke.rpc.netty.server.NettyServer;
+import org.needcoke.rpc.smartsocket.invoker.SmartSocketInvoker;
+import org.needcoke.rpc.smartsocket.server.SmartSocketServer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,11 +19,16 @@ public class TestComponent {
 //    @Primary
 //    public WeightedResponseTimeBalance weightedResponseTimeBalance(){
 //        return new WeightedResponseTimeBalance();
-//    }
+//    }d
 
-//    @Bean
-//    public SmartSocketInvoker smartSocketInvoker(RpcTypeEnum rpcTypeEnum){
-//        return new SmartSocketInvoker(rpcTypeEnum);
-//    }
+    @Bean
+    public NettyInvoker nettyInvoker(RpcTypeEnum rpcTypeEnum){
+        return new NettyInvoker(rpcTypeEnum);
+    }
+
+    @Bean
+    public NettyServer nettyServer(){
+        return new NettyServer();
+    }
 
 }

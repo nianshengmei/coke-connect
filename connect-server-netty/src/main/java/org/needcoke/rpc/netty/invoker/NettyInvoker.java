@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.connect.rpc.link.tracking.util.TrackingUtil;
 import org.needcoke.rpc.codec.CokeRequest;
-import org.needcoke.rpc.codec.CokeRequestProtocol;
 import org.needcoke.rpc.common.constant.ConnectConstant;
 import org.needcoke.rpc.common.enums.ConnectionExceptionEnum;
 import org.needcoke.rpc.common.enums.RpcTypeEnum;

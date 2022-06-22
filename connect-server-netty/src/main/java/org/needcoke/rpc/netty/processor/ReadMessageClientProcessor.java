@@ -14,7 +14,7 @@ public class ReadMessageClientProcessor implements ReadMessageProcessor{
     @Override
     public void channelRead(ChannelHandlerContext ctx, CokeRequest request) {
         if (ConnectRequestEnum.INTERNAL_RESPONSE == request.getRequestType()) {
-            log.info("smart socket client receive back linkTracking = {} , request json = {}",
+            log.info("netty client receive back linkTracking = {} , request json = {}",
                     TrackingUtil.linkTrackingJsonStr(), new String(request.toBytes()));
             ConnectUtil.putRequestMap(request.getCokeRequestId(), request.getResult());
             Thread thread = ConnectUtil.getFromThreadMap(request.getCokeRequestId());

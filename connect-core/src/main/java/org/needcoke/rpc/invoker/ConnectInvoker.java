@@ -57,15 +57,4 @@ public abstract class ConnectInvoker {
         remoteRpcTypeMap.put(instance, rpcTypeEnum);
         return rpcTypeEnum;
     }
-
-    protected InvokeResult runDefaultExecute(Connector connector, ServiceInstance instance, String beanName, String methodName, Map<String, Object> params){
-        RpcTypeEnum remoteRpcType = getRemoteRpcType(instance);
-        if(remoteRpcType == RpcTypeEnum.okHttp3){
-            if (null == connector.getHttpInvoker()) {
-                connector.setHttpInvoker(new OkHttpsInvoker(RpcTypeEnum.okHttp3));
-            }
-            return connector.compensationExecute(instance,beanName,methodName,params);
-        }
-        return null;
-    }
 }

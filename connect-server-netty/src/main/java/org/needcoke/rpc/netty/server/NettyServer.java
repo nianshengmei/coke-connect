@@ -8,6 +8,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import lombok.extern.slf4j.Slf4j;
 import org.needcoke.rpc.codec.CokeRequest;
 import org.needcoke.rpc.config.ServerConfig;
 import org.needcoke.rpc.netty.codec.RpcDecoder;
@@ -17,15 +18,14 @@ import org.needcoke.rpc.server.ConnectionServer;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
-public class NettyServer implements ConnectionServer {
+@Slf4j
+public class NettyServer extends Thread implements ConnectionServer {
 
     @Resource
     private ServerConfig serverConfig;
 
-
-    @PostConstruct
     @Override
-    public void start() {
+    public void run() {
         EventLoopGroup bossGroup = new NioEventLoopGroup(); //bossGroup就是parentGroup，是负责处理TCP/IP连接的
         EventLoopGroup workerGroup = new NioEventLoopGroup(); //workerGroup就是childGroup,是负责处理Channel(通道)的I/O事件
 
@@ -53,10 +53,16 @@ public class NettyServer implements ConnectionServer {
 
         //成功绑定到端口之后,给channel增加一个 管道关闭的监听器并同步阻塞,直到channel关闭,线程才会往下执行,结束进程。
         try {
+            log.info("netty server start bind port {}",serverConfig.getCokeServerPort());
             future.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             throw new RuntimeException();
         }
     }
 
+    @PostConstruct
+    @Override
+    public synchronized void start() {
+        super.start();
+    }
 }
