@@ -32,8 +32,8 @@ public class ServerConfig {
      */
     @ConditionalOnMissingBean(ConnectInvoker.class)
     @Bean
-    public OkHttpsInvoker okHttpsInvoker(RpcTypeEnum rpcTypeEnum){
-        return new OkHttpsInvoker(rpcTypeEnum);
+    public OkHttpsInvoker okHttpsInvoker(){
+        return new OkHttpsInvoker();
     }
 
      /**

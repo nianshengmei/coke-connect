@@ -107,14 +107,4 @@ public class ConnectUtil {
         InvokeResult result = connectInvoker.execute(null,instance, beanName, methodName, params);
         return result;
     }
-
-
-    public static Integer getCokeServerPort(ServiceInstance instance){
-        SHttpTask sHttpTask = HTTP.builder().addMsgConvertor(new JacksonMsgConvertor()).build()
-                .sync(instance.getUri() + ConnectConstant.COKE_PORT_RELATIVE_PATH)
-                .bodyType(HttpContentTypeEnum.JSON.getValue());
-        HttpResult result = sHttpTask
-                .get();
-        return result.getBody().toBean(Integer.class);
-    }
 }

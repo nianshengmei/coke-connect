@@ -59,28 +59,4 @@ public class RpcController {
             throw new CokeConnectException(ConnectionExceptionEnum.INVOKE_METHOD_ERROR);
         }
     }
-
-    @GetMapping("port")
-    public Integer cokeServerPort() {
-        if (null == serverConfig) {
-            return 0;
-        }
-        try{
-            applicationContext.getBean(OkHttpsInvoker.class);
-        }catch (Exception e){
-            return serverConfig.getCokeServerPort();
-
-        }
-        return 0;
-    }
-
-    @GetMapping("rpcType")
-    public RpcTypeEnum getRpcType(){
-        try {
-            OkHttpsInvoker bean = applicationContext.getBean(OkHttpsInvoker.class);
-        }catch (Exception e){
-            return RpcTypeEnum.smartSocket;
-        }
-        return  RpcTypeEnum.okHttp3;
-    }
 }

@@ -26,10 +26,6 @@ import java.util.concurrent.locks.LockSupport;
 @NoArgsConstructor
 public class NettyInvoker extends ConnectInvoker {
 
-    public NettyInvoker(RpcTypeEnum rpcTypeEnum) {
-        super(rpcTypeEnum);
-    }
-
     private final Map<String, NettyClient> clientMap = new ConcurrentHashMap<>();
 
     private final Map<String, Channel> channelMap = new ConcurrentHashMap<>();
@@ -40,7 +36,7 @@ public class NettyInvoker extends ConnectInvoker {
             return res;
         }
         String uri = instance.getHost() + ConnectConstant.COLON + instance.getPort();
-        Integer serverPort = ConnectUtil.getCokeServerPort(instance);
+        Integer serverPort = connector.getServerPort(instance);
         if (0 == serverPort) {
             throw new CokeConnectException(ConnectionExceptionEnum.REMOTE_SERVICE_DOES_NOT_OPEN_THE_COKE_SERVICE_PORT);
         }
@@ -69,7 +65,7 @@ public class NettyInvoker extends ConnectInvoker {
                 channel = clientMap.get(uri).start();
             } catch (InterruptedException ex) {
                 if (null == connector.getHttpInvoker()) {
-                    connector.setHttpInvoker(new OkHttpsInvoker(RpcTypeEnum.okHttp3));
+                    connector.setHttpInvoker(new OkHttpsInvoker());
                 }
                 return connector.compensationExecute(instance,beanName,methodName,params);
             }

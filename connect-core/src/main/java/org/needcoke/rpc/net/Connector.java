@@ -48,10 +48,6 @@ public class Connector {
         this.severPortMap = new HashMap<>();
     }
 
-    public Map<ServiceInstance, RpcTypeEnum> getRequestTypeMap() {
-        return requestTypeMap;
-    }
-
     /**
      * 执行远程方法
      *
@@ -69,8 +65,9 @@ public class Connector {
             if (CollUtil.isNotEmpty(metadata)) {
                 String rpcType = metadata.get("rpcType");
                 String cokeServerPort = metadata.get("coke-server-port");
+                RpcTypeEnum rp = RpcTypeEnum.okHttp3;
                 if (null != rpcType) {
-                    RpcTypeEnum rp = RpcTypeEnum.okHttp3;
+
                     switch (rpcType) {
                         case "netty":
                             rp = RpcTypeEnum.netty;
@@ -89,13 +86,13 @@ public class Connector {
                         default:
                             rp = RpcTypeEnum.okHttp3;
                     }
-                    this.requestTypeMap.put(instance,rp);
-                    try {
-                        int port = Integer.parseInt(cokeServerPort);
-                        this.severPortMap.put(instance,port);
-                    }catch (Exception e){
-                        throw new CokeConnectException(ConnectionExceptionEnum.THE_FORMAT_OF_THE_REMOTE_SERVICE_PORT_NUMBER_IS_INCORRECT_PLEASE_CHECK_THE_CONFIGURATION_OF_THE_REMOTE_SERVICE_PORT_NUMBER);
-                    }
+                }
+                this.requestTypeMap.put(instance,rp);
+                try {
+                    int port = Integer.parseInt(cokeServerPort);
+                    this.severPortMap.put(instance,port);
+                }catch (Exception e){
+                    throw new CokeConnectException(ConnectionExceptionEnum.THE_FORMAT_OF_THE_REMOTE_SERVICE_PORT_NUMBER_IS_INCORRECT_PLEASE_CHECK_THE_CONFIGURATION_OF_THE_REMOTE_SERVICE_PORT_NUMBER);
                 }
             }
         }

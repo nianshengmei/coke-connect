@@ -25,11 +25,6 @@ import java.util.Map;
 @NoArgsConstructor
 public class OkHttpsInvoker extends ConnectInvoker {
 
-
-    public OkHttpsInvoker(RpcTypeEnum rpcTypeEnum) {
-        rpcTypeEnum = RpcTypeEnum.okHttp3;
-    }
-
     @Override
     public InvokeResult execute(Connector connector, ServiceInstance instance, String beanName, String methodName, Map<String, Object> params) {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();

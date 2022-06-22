@@ -3,7 +3,6 @@ package org.needcoke.a.configuration;
 import lombok.extern.slf4j.Slf4j;
 import org.needcoke.rpc.annotation.Call;
 import org.needcoke.rpc.annotation.Rpc;
-import org.needcoke.rpc.common.enums.RpcTypeEnum;
 import org.needcoke.rpc.netty.invoker.NettyInvoker;
 import org.needcoke.rpc.netty.server.NettyServer;
 import org.needcoke.rpc.smartsocket.invoker.SmartSocketInvoker;
@@ -34,13 +33,23 @@ public class Config {
         return "say : "+word;
     }
 
+//    @Bean
+//    public NettyInvoker nettyInvoker(){
+//        return new NettyInvoker();
+//    }
+//
+//    @Bean
+//    public NettyServer nettyServer(){
+//        return new NettyServer();
+//    }
+
     @Bean
-    public NettyInvoker nettyInvoker(RpcTypeEnum rpcTypeEnum){
-        return new NettyInvoker(rpcTypeEnum);
+    public SmartSocketInvoker smartSocketInvoker(){
+        return new SmartSocketInvoker();
     }
 
     @Bean
-    public NettyServer nettyServer(){
-        return new NettyServer();
+    public SmartSocketServer smartSocketServer(){
+        return new SmartSocketServer();
     }
 }

@@ -20,14 +20,24 @@ import java.util.Map;
 @Rpc
 public class CController {
 
+//    @Bean
+//    public NettyInvoker nettyInvoker(){
+//        return new NettyInvoker();
+//    }
+//
+//    @Bean
+//    public NettyServer nettyServer(){
+//        return new NettyServer();
+//    }
+
     @Bean
-    public NettyInvoker nettyInvoker(RpcTypeEnum rpcTypeEnum){
-        return new NettyInvoker(rpcTypeEnum);
+    public SmartSocketInvoker smartSocketInvoker(){
+        return new SmartSocketInvoker();
     }
 
     @Bean
-    public NettyServer nettyServer(){
-        return new NettyServer();
+    public SmartSocketServer smartSocketServer(){
+        return new SmartSocketServer();
     }
 
     @Resource

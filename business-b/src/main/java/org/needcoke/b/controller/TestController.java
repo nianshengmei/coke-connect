@@ -40,9 +40,5 @@ public class TestController {
 
     @Resource
     private LoadBalance loadBalance;
-    @GetMapping("testPort")
-    public Integer testPort(){
-        List<ServiceInstance> instances = discoveryClient.getInstances("bussiness-a");
-        return ConnectUtil.getCokeServerPort(loadBalance.choose("bussiness-a",instances));
-    }
+
 }
