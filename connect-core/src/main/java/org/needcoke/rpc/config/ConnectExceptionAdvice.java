@@ -17,12 +17,24 @@ import java.util.Map;
 @RestControllerAdvice
 public class ConnectExceptionAdvice {
 
-    @ExceptionHandler(value = CokeConnectException.class)
-    public Map<String, String> exceptionHandle(CokeConnectException exception) {
+
+    public Map<String, String> connectExceptionHandle(CokeConnectException exception) {
         Map<String, String> ret = new HashMap<>();
         ret.put("message", exception.getMessage());
         ret.put("note", exception.getNote());
         ret.put("errorCode", exception.getErrorCode());
+        return ret;
+    }
+
+    @ExceptionHandler(value = Exception.class)
+    public Map<String, String> exceptionHandle(Exception exception) {
+        if(exception instanceof CokeConnectException){
+            return connectExceptionHandle((CokeConnectException)exception);
+        }
+        Map<String, String> ret = new HashMap<>();
+        ret.put("message", exception.getMessage());
+        ret.put("note", exception.getLocalizedMessage());
+        ret.put("errorCode", "502");
         return ret;
     }
 }

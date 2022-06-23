@@ -59,7 +59,7 @@ public class NettyInvoker extends ConnectInvoker {
         InvokeResult tmp = new InvokeResult();
         long start = DateUtil.current();
         ConnectUtil.putRequestMap(tmp);
-        fuseThreadPool.newTask(new Fuse(fuseConfig.getFuseTimeOut(),TrackingUtil.getRequestId()));
+
         try {
             channel.writeAndFlush(request);
         } catch (Exception e) {
@@ -76,7 +76,6 @@ public class NettyInvoker extends ConnectInvoker {
             channelMap.put(uri,channel);
             return execute(connector,instance,beanName,methodName,params);
         }
-//        ConnectUtil.putThreadMap(TrackingUtil.getRequestId(), Thread.currentThread());
         Fuse fuse = new Fuse(fuseConfig.getFuseTimeOut(), TrackingUtil.getRequestId());
         fuseThreadPool.newTask(fuse);
         LockSupport.park();
