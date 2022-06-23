@@ -66,6 +66,7 @@ public class Fuse implements Runnable {
                 throw new RuntimeException(e);
             } finally {
                 lock.unlock();
+                lockMap.remove(lockField);
                 unParkMap.remove(lockField);
                 unParkThreadMap.remove(lockField);
             }
@@ -87,6 +88,7 @@ public class Fuse implements Runnable {
                 throw new RuntimeException(e);
             }finally {
                 tLock.unlock();
+                lockMap.remove(lockField);
             }
         }
         return false;
