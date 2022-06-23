@@ -15,39 +15,41 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Component("cCon")
 @Rpc
 public class CController {
 
+    @Bean
+    public NettyInvoker nettyInvoker(){
+        return new NettyInvoker();
+    }
+
+    @Bean
+    public NettyServer nettyServer(){
+        return new NettyServer();
+    }
+
 //    @Bean
-//    public NettyInvoker nettyInvoker(){
-//        return new NettyInvoker();
+//    public SmartSocketInvoker smartSocketInvoker(){
+//        return new SmartSocketInvoker();
 //    }
 //
 //    @Bean
-//    public NettyServer nettyServer(){
-//        return new NettyServer();
+//    public SmartSocketServer smartSocketServer(){
+//        return new SmartSocketServer();
 //    }
-
-    @Bean
-    public SmartSocketInvoker smartSocketInvoker(){
-        return new SmartSocketInvoker();
-    }
-
-    @Bean
-    public SmartSocketServer smartSocketServer(){
-        return new SmartSocketServer();
-    }
 
     @Resource
     private ConnectorFactory connectorFactory;
 
     @Call("cTest2")
-    public String cTest(String word){
+    public Object cTest(String word){
         Map<String,Object> map = new HashMap<>();
         map.put("word",word);
+
         InvokeResult execute = connectorFactory.connector("bussiness-a").execute("config", "hahha2", map);
-        return execute.getBody().toString();
+        return execute.getBody();
     }
 }

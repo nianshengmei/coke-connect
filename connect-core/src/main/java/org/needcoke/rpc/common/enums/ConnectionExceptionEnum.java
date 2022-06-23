@@ -10,7 +10,7 @@ public enum ConnectionExceptionEnum {
     NO_SUCH_BEAN_NAME("0001", "no such bean name", "没有找到对应的beanName的bean"),
 
     BEAN_WITHOUT_METHOD("0002",
-                                "the bean name ${beanName} without method name ${method} ,you can use annotation @call or check method public.",
+                                "the bean name {} without method name {} ,you can use annotation @call or check method public.",
                                 "您请求的bean没有该方法,您可以考虑添加@call注解,或者修改method的访问权限为public。"),
 
     INVOKE_METHOD_ERROR("0003","invoke remote method error,please check the method name or param list ,if @Call ,you need to use @Call.value"

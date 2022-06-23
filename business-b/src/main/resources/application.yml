@@ -1,7 +1,7 @@
 
 spring:
   application:
-    name: bussiness-c
+    name: bussiness-b
   # nacos默认可以不写  但是 如果不是默认的必须要写
   cloud:
     nacos:
@@ -9,8 +9,8 @@ spring:
       discovery:
         metadata:
           coke-server-port: 13001
-#          rpcType: netty
-          rpcType: smart socket
+          rpcType: netty
+#          rpcType: smart socket
         #server-addr: http://192.168.*:8848
         server-addr: http://127.0.0.1:8848
         cluster-name: 严鸣是吕诗文爸爸

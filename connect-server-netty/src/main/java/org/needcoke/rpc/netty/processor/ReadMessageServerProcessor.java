@@ -30,7 +30,7 @@ public class ReadMessageServerProcessor implements ReadMessageProcessor{
                     TrackingUtil.linkTrackingJsonStr(), beanName, methodName, JSONObject.toJSONString(params));
             Method method = SpringContextUtils.getMethod(beanName, methodName);
             if (null == method) {
-                log.error(ConnectionExceptionEnum.BEAN_WITHOUT_METHOD.logStatement("beanName {} , methodName {} , linkTracking = {}"), beanName, methodName, TrackingUtil.linkTrackingJsonStr());
+                log.error("beanName {} , methodName {} , linkTracking = {}", beanName, methodName, TrackingUtil.linkTrackingJsonStr());
                 throw new CokeConnectException(ConnectionExceptionEnum.BEAN_WITHOUT_METHOD);
             }
             Object bean = SpringContextUtils.getBean(beanName);

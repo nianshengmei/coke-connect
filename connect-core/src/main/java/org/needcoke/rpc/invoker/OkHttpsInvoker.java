@@ -4,20 +4,10 @@ import com.ejlchina.okhttps.HTTP;
 import com.ejlchina.okhttps.HttpResult;
 import com.ejlchina.okhttps.SHttpTask;
 import com.ejlchina.okhttps.jackson.JacksonMsgConvertor;
-import lombok.NoArgsConstructor;
-import org.connect.rpc.link.tracking.config.LinkTrackingContextHolder;
 import org.connect.rpc.link.tracking.util.TrackingUtil;
 import org.needcoke.rpc.common.constant.ConnectConstant;
 import org.needcoke.rpc.common.enums.HttpContentTypeEnum;
-import org.needcoke.rpc.common.enums.RpcTypeEnum;
-import org.needcoke.rpc.config.FuseConfig;
-import org.needcoke.rpc.fuse.Fuse;
-import org.needcoke.rpc.fuse.FuseTask;
-import org.needcoke.rpc.fuse.FuseThreadPool;
 import org.needcoke.rpc.net.Connector;
-import org.needcoke.rpc.utils.SpringContextUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -26,7 +16,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
 import java.util.Map;
-import java.util.concurrent.DelayQueue;
 
 /**
  * 采用okHttps的跨服务调用器
@@ -50,7 +39,6 @@ public class OkHttpsInvoker extends ConnectInvoker {
             String header = request.getHeader(nextElement);
             sHttpTask.addHeader(nextElement, header);
         }
-        fuse();
         HttpResult result = sHttpTask
                 .post();
         handleResult(instance.getServiceId(), beanName, methodName, params, result);

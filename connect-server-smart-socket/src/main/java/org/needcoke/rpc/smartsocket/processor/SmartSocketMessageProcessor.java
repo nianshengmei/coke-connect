@@ -22,7 +22,7 @@ public abstract class SmartSocketMessageProcessor<T> implements MessageProcessor
             throw new RuntimeException(e);
             // TODO 未来需要处理返回失败的场景
         }
-        LinkTrackingContextHolder.clear();
+
     }
 
     public void response(AioSession session, CokeRequest response){
@@ -35,7 +35,6 @@ public abstract class SmartSocketMessageProcessor<T> implements MessageProcessor
         } catch (IOException e) {
             e.printStackTrace();
         }
-        LinkTrackingContextHolder.clear();
     }
 
 }

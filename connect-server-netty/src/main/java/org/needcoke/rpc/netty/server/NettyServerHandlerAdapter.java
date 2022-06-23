@@ -37,6 +37,5 @@ public class NettyServerHandlerAdapter extends ChannelInboundHandlerAdapter {
             LinkTrackingContextHolder.setLinkTracking(linkTracking);
         }
         readMessageProcessor.channelRead(ctx,request);
-        LinkTrackingContextHolder.clear();
     }
 }

@@ -1,16 +1,13 @@
 package org.needcoke.rpc.net;
 
-import org.needcoke.rpc.fuse.FuseTask;
 import org.needcoke.rpc.invoker.ConnectInvoker;
 import org.needcoke.rpc.loadBalance.LoadBalance;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.DelayQueue;
 
 @Component
 public class ConnectorFactory {

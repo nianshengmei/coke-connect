@@ -1,19 +1,14 @@
 package org.needcoke.rpc.config;
 
 import lombok.Getter;
-import org.needcoke.rpc.fuse.FuseTask;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
-
-import java.util.concurrent.DelayQueue;
 
 @Getter
 @Configuration
 public class FuseConfig {
 
-    @Value("${coke.fuse.timeout:2000}")
+    @Value("${coke.fuse.timeout:1000}")
     private long fuseTimeOut;
 
     @Value("${coke.fuse.pool.coreThreadPoolSize:2}")
@@ -27,10 +22,4 @@ public class FuseConfig {
 
     @Value("${coke.fuse.pool.poolCapacity:9999}")
     private int poolCapacity;
-
-    @Bean
-    public DelayQueue<FuseTask> fuseTaskDelayQueue(){
-        return new DelayQueue<>();
-    }
-
 }

@@ -3,7 +3,6 @@ package org.needcoke.rpc.fuse;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.needcoke.rpc.config.FuseConfig;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -39,7 +38,7 @@ public class FuseThreadPool {
 
     @PostConstruct
     public void init() {
-        new ThreadPoolExecutor(
+        service = new ThreadPoolExecutor(
                 fuseConfig.getCoreThreadPoolSize(),
                 fuseConfig.getMaximumPoolSize(),
                 fuseConfig.getKeepAliveTime(),

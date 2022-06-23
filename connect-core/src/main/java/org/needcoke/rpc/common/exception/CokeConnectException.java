@@ -42,7 +42,6 @@ public class CokeConnectException extends RuntimeException {
         super(connectionExceptionEnum.getValue(),e);
         this.errorCode = connectionExceptionEnum.getErrorCode();
         this.note = connectionExceptionEnum.getNote();
-        this.requestId = TrackingUtil.getRequestId();
     }
 
     public CokeConnectException(String requestId ,ConnectionExceptionEnum connectionExceptionEnum,Throwable e) {

@@ -88,7 +88,6 @@ public class SmartSocketInvoker extends ConnectInvoker {
         ConnectUtil.putThreadMap(TrackingUtil.getRequestId(), Thread.currentThread());
         LockSupport.park();
         InvokeResult result = ConnectUtil.getFromRequestMap(TrackingUtil.getRequestId());
-        LinkTrackingContextHolder.clear();
         long end = DateUtil.current();
         log.info("requestId = {} , start = {} , end = {} ,cost = {}", TrackingUtil.getRequestId(), start, end, end - start);
         result.setTime(end - start);

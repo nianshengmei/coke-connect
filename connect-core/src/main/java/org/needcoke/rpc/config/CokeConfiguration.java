@@ -11,7 +11,7 @@ import java.util.Map;
  * @author Gilgamesh
  * @date 2022/4/2
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class CokeConfiguration {
 
     /**
