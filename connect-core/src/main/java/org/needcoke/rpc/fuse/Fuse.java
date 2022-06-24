@@ -3,6 +3,7 @@ package org.needcoke.rpc.fuse;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
@@ -10,9 +11,9 @@ import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Slf4j
-public class Fuse implements Runnable {
+public class Fuse extends Thread {
 
-    private Lock lock = new ReentrantLock();
+    private final ReentrantLock lock = new ReentrantLock();
 
     private long timeout;
 
@@ -27,14 +28,20 @@ public class Fuse implements Runnable {
     private static final Map<Object, Thread> unParkThreadMap = new ConcurrentHashMap<>();
     private static final Map<Object, Boolean> unParkMap = new ConcurrentHashMap<>();
 
-    private static final Map<Object, Lock> lockMap = new ConcurrentHashMap<>();
+    private static ArrayBlockingQueue<Runnable> blockQueue;
+
+    public static void setBlockQueue(ArrayBlockingQueue<Runnable> blockQueue) {
+        Fuse.blockQueue = blockQueue;
+    }
 
     public Fuse(long timeout, TimeUnit unit, Object lockField) {
         this.timeout = timeout;
         this.unit = unit;
         this.lockField = lockField;
         this.unParkThread = Thread.currentThread();
-        lockMap.put(lockField, lock);
+        FuseContext.lockPool.put(lockField, lock);
+        unParkMap.put(lockField, true);
+        unParkThreadMap.put(lockField, unParkThread);
     }
 
     public Fuse(long timeout, Object lockField) {
@@ -42,14 +49,14 @@ public class Fuse implements Runnable {
         this.unit = TimeUnit.MILLISECONDS;
         this.lockField = lockField;
         this.unParkThread = Thread.currentThread();
-        lockMap.put(lockField, lock);
+        FuseContext.lockPool.put(lockField, lock);
+        unParkMap.put(lockField, true);
+        unParkThreadMap.put(lockField, unParkThread);
     }
 
 
     @Override
     public void run() {
-        unParkMap.put(lockField, true);
-        unParkThreadMap.put(lockField, unParkThread);
         try {
             unit.sleep(timeout);
         } catch (InterruptedException e) {
@@ -66,7 +73,7 @@ public class Fuse implements Runnable {
                 throw new RuntimeException(e);
             } finally {
                 lock.unlock();
-                lockMap.remove(lockField);
+                FuseContext.lockPool.remove(lockField);
                 unParkMap.remove(lockField);
                 unParkThreadMap.remove(lockField);
             }
@@ -75,7 +82,7 @@ public class Fuse implements Runnable {
     }
 
     public static boolean unPark(Object lockField) {
-        Lock tLock = lockMap.get(lockField);
+        Lock tLock = FuseContext.lockPool.get(lockField);
         if(tLock.tryLock()) {
             tLock.lock();
             try {
@@ -88,7 +95,7 @@ public class Fuse implements Runnable {
                 throw new RuntimeException(e);
             }finally {
                 tLock.unlock();
-                lockMap.remove(lockField);
+                FuseContext.lockPool.remove(lockField);
             }
         }
         return false;

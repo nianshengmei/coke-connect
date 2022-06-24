@@ -26,7 +26,7 @@ public class ReadMessageServerProcessor implements ReadMessageProcessor{
             String beanName = request.getBeanName();
             String methodName = request.getMethodName();
             Map<String, Object> params = request.getParams();
-            log.info("execute netty linkTracking = {} , -- beanName : {} , methodName : {} , param : {}",
+            log.debug("execute netty linkTracking = {} , -- beanName : {} , methodName : {} , param : {}",
                     TrackingUtil.linkTrackingJsonStr(), beanName, methodName, JSONObject.toJSONString(params));
             Method method = SpringContextUtils.getMethod(beanName, methodName);
             if (null == method) {
@@ -35,7 +35,7 @@ public class ReadMessageServerProcessor implements ReadMessageProcessor{
             }
             Object bean = SpringContextUtils.getBean(beanName);
             try {
-                Object invoke = null;
+                Object invoke;
                 if (CollUtil.isEmpty(params)) {
                     invoke = method.invoke(bean);
                 } else {

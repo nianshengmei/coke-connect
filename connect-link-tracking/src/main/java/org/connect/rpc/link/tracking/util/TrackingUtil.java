@@ -19,6 +19,7 @@ public class TrackingUtil {
         if (StrUtil.isEmpty(cokeRequestIdJson)) {
             LinkTracking linkTracking = new LinkTracking(port);
             linkTracking.setIndex(1);
+            linkTracking.setStartTime(System.currentTimeMillis());
             LinkTrackingContextHolder.setLinkTracking(linkTracking);
         } else {
             LinkTracking linkTracking = gson.fromJson(cokeRequestIdJson, LinkTracking.class);

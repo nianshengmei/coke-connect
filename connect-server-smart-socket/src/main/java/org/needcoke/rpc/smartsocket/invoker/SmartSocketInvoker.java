@@ -6,10 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.connect.rpc.link.tracking.config.LinkTrackingContextHolder;
 import org.connect.rpc.link.tracking.util.TrackingUtil;
 import org.needcoke.rpc.codec.CokeRequest;
+import org.needcoke.rpc.fuse.Fuse;
 import org.needcoke.rpc.smartsocket.codec.CokeRequestProtocol;
 import org.needcoke.rpc.common.constant.ConnectConstant;
 import org.needcoke.rpc.common.enums.ConnectionExceptionEnum;
-import org.needcoke.rpc.common.enums.RpcTypeEnum;
 import org.needcoke.rpc.common.exception.CokeConnectException;
 import org.needcoke.rpc.invoker.ConnectInvoker;
 import org.needcoke.rpc.invoker.InvokeResult;
@@ -64,6 +64,8 @@ public class SmartSocketInvoker extends ConnectInvoker {
                 .setParams(params)
                 .addHeader(TrackingUtil.headerKey(), TrackingUtil.headerValue());
         byte[] bytes = request.toBytes();
+        InvokeResult tmp = new InvokeResult();
+        ConnectUtil.putRequestMap(tmp);
         try {
             session.writeBuffer().writeInt(bytes.length);
             session.writeBuffer().write(bytes);
@@ -82,12 +84,11 @@ public class SmartSocketInvoker extends ConnectInvoker {
             sessionMap.put(uri,session);
             return execute(connector,instance,beanName,methodName,params);
         }
-        InvokeResult tmp = new InvokeResult();
-        long start = DateUtil.current();
-        ConnectUtil.putRequestMap(tmp);
-        ConnectUtil.putThreadMap(TrackingUtil.getRequestId(), Thread.currentThread());
+        Fuse fuse = new Fuse(fuseConfig.getFuseTimeOut(), TrackingUtil.getRequestId());
+        fuseThreadPool.newTask(fuse);
         LockSupport.park();
         InvokeResult result = ConnectUtil.getFromRequestMap(TrackingUtil.getRequestId());
+        long start = LinkTrackingContextHolder.getLinkTracking().getStartTime();
         long end = DateUtil.current();
         log.info("requestId = {} , start = {} , end = {} ,cost = {}", TrackingUtil.getRequestId(), start, end, end - start);
         result.setTime(end - start);

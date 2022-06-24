@@ -9,8 +9,8 @@ spring:
       discovery:
         metadata:
           coke-server-port: 13007
-          rpcType: netty
-#          rpcType: smart socket
+#          rpcType: netty
+          rpcType: smart socket
         #server-addr: http://192.168.*:8848
         server-addr: http://127.0.0.1:8848
         cluster-name: 严鸣是吕诗文爸爸

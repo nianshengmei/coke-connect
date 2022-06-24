@@ -20,7 +20,6 @@ public abstract class SmartSocketMessageProcessor<T> implements MessageProcessor
             writer.flush();
         } catch (IOException e) {
             throw new RuntimeException(e);
-            // TODO 未来需要处理返回失败的场景
         }
 
     }

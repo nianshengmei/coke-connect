@@ -27,6 +27,8 @@ public class LinkTracking {
 
     private String serviceId;
 
+    private long startTime;
+
     private static final AtomicLong requestIdMaker = new AtomicLong(1);
 
     public LinkTracking(int port) {

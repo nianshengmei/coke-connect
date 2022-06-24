@@ -22,9 +22,6 @@ public class FuseThreadPool {
     private final ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("coke-connect-Fuse-pool-%d").build();
 
 
-
-
-
     /**
      * corePoolSize    线程池核心池的大小
      * maximumPoolSize 线程池中允许的最大线程数量
@@ -38,12 +35,14 @@ public class FuseThreadPool {
 
     @PostConstruct
     public void init() {
+        ArrayBlockingQueue<Runnable> blockingQueue = new ArrayBlockingQueue<>(fuseConfig.getPoolCapacity());
+        Fuse.setBlockQueue(blockingQueue);
         service = new ThreadPoolExecutor(
                 fuseConfig.getCoreThreadPoolSize(),
                 fuseConfig.getMaximumPoolSize(),
                 fuseConfig.getKeepAliveTime(),
                 TimeUnit.MILLISECONDS,
-                new ArrayBlockingQueue<>(fuseConfig.getPoolCapacity()),
+                blockingQueue,
                 namedThreadFactory,
                 new ThreadPoolExecutor.AbortPolicy()
         );

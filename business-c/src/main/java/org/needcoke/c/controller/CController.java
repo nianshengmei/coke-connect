@@ -21,25 +21,25 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Rpc
 public class CController {
 
-    @Bean
-    public NettyInvoker nettyInvoker(){
-        return new NettyInvoker();
-    }
-
-    @Bean
-    public NettyServer nettyServer(){
-        return new NettyServer();
-    }
-
 //    @Bean
-//    public SmartSocketInvoker smartSocketInvoker(){
-//        return new SmartSocketInvoker();
+//    public NettyInvoker nettyInvoker(){
+//        return new NettyInvoker();
 //    }
 //
 //    @Bean
-//    public SmartSocketServer smartSocketServer(){
-//        return new SmartSocketServer();
+//    public NettyServer nettyServer(){
+//        return new NettyServer();
 //    }
+
+    @Bean
+    public SmartSocketInvoker smartSocketInvoker(){
+        return new SmartSocketInvoker();
+    }
+
+    @Bean
+    public SmartSocketServer smartSocketServer(){
+        return new SmartSocketServer();
+    }
 
     @Resource
     private ConnectorFactory connectorFactory;

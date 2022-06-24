@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import io.netty.channel.Channel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.connect.rpc.link.tracking.config.LinkTrackingContextHolder;
 import org.connect.rpc.link.tracking.util.TrackingUtil;
 import org.needcoke.rpc.codec.CokeRequest;
 import org.needcoke.rpc.common.constant.ConnectConstant;
@@ -57,9 +58,7 @@ public class NettyInvoker extends ConnectInvoker {
                 .addHeader(TrackingUtil.headerKey(), TrackingUtil.headerValue());
         byte[] bytes = request.toBytes();
         InvokeResult tmp = new InvokeResult();
-        long start = DateUtil.current();
         ConnectUtil.putRequestMap(tmp);
-
         try {
             channel.writeAndFlush(request);
         } catch (Exception e) {
@@ -80,8 +79,9 @@ public class NettyInvoker extends ConnectInvoker {
         fuseThreadPool.newTask(fuse);
         LockSupport.park();
         InvokeResult result = ConnectUtil.getFromRequestMap(TrackingUtil.getRequestId());
+        long start = LinkTrackingContextHolder.getLinkTracking().getStartTime();
         long end = DateUtil.current();
-        log.info("requestId = {} , start = {} , end = {} ,cost = {}", TrackingUtil.getRequestId(), start, end, end - start);
+        log.debug("requestId = {} , start = {} , end = {} ,cost = {}", TrackingUtil.getRequestId(), start, end, end - start);
         result.setTime(end - start);
         return result;
     }
