@@ -51,7 +51,6 @@ public class RpcClientRegister implements ImportBeanDefinitionRegistrar, Resourc
         Set<String> basePackages = getBasePackages(metadata);
 
         ClassPathBeanDefinitionScanner classPathBeanDefinitionScanner = new ClassPathBeanDefinitionScanner(registry, true, environment);
-        classPathBeanDefinitionScanner.
 
         // 遍历每一个basePackages
         for (String basePackage : basePackages) {
