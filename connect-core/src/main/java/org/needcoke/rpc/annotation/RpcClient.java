@@ -7,6 +7,14 @@ import java.lang.annotation.*;
 @Documented
 public @interface RpcClient {
 
+    String name() default "";
+
+    String value() default "";
+
+    String beanName();
+
     String serviceId();
+
+
 
 }
