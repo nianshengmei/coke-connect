@@ -2,7 +2,6 @@ package org.needcoke.rpc.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,4 +28,5 @@ public class CokeConfiguration {
     public Map<String, Method> classNameMethodMap(){
         return new HashMap<>();
     }
+
 }

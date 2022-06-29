@@ -3,6 +3,7 @@ package org.needcoke.rpc.common.exception;
 import lombok.Data;
 import org.connect.rpc.link.tracking.util.TrackingUtil;
 import org.needcoke.rpc.common.enums.ConnectionExceptionEnum;
+import org.needcoke.rpc.common.enums.EnumInterface;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -32,13 +33,13 @@ public class CokeConnectException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
-    public CokeConnectException(ConnectionExceptionEnum connectionExceptionEnum) {
+    public CokeConnectException(EnumInterface connectionExceptionEnum) {
         super(connectionExceptionEnum.getValue());
         this.errorCode = connectionExceptionEnum.getErrorCode();
         this.note = connectionExceptionEnum.getNote();
     }
 
-    public CokeConnectException(ConnectionExceptionEnum connectionExceptionEnum,Throwable e) {
+    public CokeConnectException(EnumInterface connectionExceptionEnum,Throwable e) {
         super(connectionExceptionEnum.getValue(),e);
         this.errorCode = connectionExceptionEnum.getErrorCode();
         this.note = connectionExceptionEnum.getNote();

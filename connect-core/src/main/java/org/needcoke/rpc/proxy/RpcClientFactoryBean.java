@@ -12,7 +12,7 @@ import java.util.Objects;
 public class RpcClientFactoryBean implements FactoryBean<Object>, InitializingBean, ApplicationContextAware {
 
     /**
-     * 服务提供者名称
+     * beanName
      */
     private String name;
 
@@ -35,9 +35,9 @@ public class RpcClientFactoryBean implements FactoryBean<Object>, InitializingBe
 
     @Override
     public Object getObject() throws Exception {
-        // todo do something
         // 创建一个代理对象并返回
-        return ClientProxyCreateFactory.getProxyService(type);
+        Object proxyService = ClientProxyCreateFactory.getProxyService(type);
+        return proxyService;
     }
 
     @Override

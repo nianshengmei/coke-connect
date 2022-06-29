@@ -1,6 +1,7 @@
 package org.needcoke.b.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.needcoke.b.client.ConClient;
 import org.needcoke.rpc.invoker.InvokeResult;
 import org.needcoke.rpc.loadBalance.LoadBalance;
 import org.needcoke.rpc.net.ConnectorFactory;
@@ -27,12 +28,15 @@ public class TestController {
 
     private final ConnectorFactory connectorFactory;
 
+    private final ConClient client;
+
     @GetMapping("test")
     public InvokeResult test(){
         Map<String,Object> map = new HashMap<>();
         map.put("word","刘勇是死废物");
-        InvokeResult execute = connectorFactory.connector("bussiness-c").execute( "cCon", "cTest2", map);
-        return execute;
+        //InvokeResult execute = connectorFactory.connector("bussiness-c").execute( "cCon", "cTest2", map);
+        //return execute;
+        return new InvokeResult().setBody(client.cTest2("刘勇是死废物"));
     }
 
     @Resource

@@ -6,7 +6,7 @@ package org.needcoke.rpc.common.enums;
  * @author yanming
  * @date 2022/5/12
  */
-public enum ConnectionExceptionEnum {
+public enum ConnectionExceptionEnum implements EnumInterface{
     NO_SUCH_BEAN_NAME("0001", "no such bean name", "没有找到对应的beanName的bean"),
 
     BEAN_WITHOUT_METHOD("0002",
