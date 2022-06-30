@@ -18,7 +18,7 @@ public class TestComponent {
 //    @Primary
 //    public WeightedResponseTimeBalance weightedResponseTimeBalance(){
 //        return new WeightedResponseTimeBalance();
-//    }d
+//    }
 
     @Bean
     public NettyInvoker nettyInvoker(){

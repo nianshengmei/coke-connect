@@ -21,12 +21,12 @@ public class InvocationHandler<T> implements java.lang.reflect.InvocationHandler
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         RpcClient rpcClient = serviceClass.getAnnotation(RpcClient.class);
         ConnectorFactory connectorFactory = SpringContextUtils.getBean(ConnectorFactory.class);
-        if(StrUtil.isEmpty(rpcClient.serviceId())){
-            throw new RuntimeException(serviceClass.getName()+" need serviceId");
+        if (StrUtil.isEmpty(rpcClient.serviceId())) {
+            throw new RuntimeException(serviceClass.getName() + " need serviceId");
         }
-        Map<String,Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         for (int i = 1; i <= args.length; i++) {
-            params.put("arg"+i,args[i]);
+            params.put("arg" + i, args[i-1]);
         }
         InvokeResult result = connectorFactory.connector(rpcClient.serviceId()).execute(rpcClient.beanName(), method.getName(), params);
         return result.getBody();
