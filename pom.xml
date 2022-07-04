@@ -11,19 +11,19 @@
 
     <description>abandon这个单词是词汇表的第一单词,coke-connect用于作为初始版本</description>
     <modules>
-        <module>connect-core</module>
-        <module>register-nacos</module>
-        <module>register-eureka</module>
-        <module>bussiness-a</module>
-        <module>business-b</module>
-        <module>business-c</module>
+
+        <module>connect-fuse</module>
         <module>connect-link-tracking</module>
+        <module>connect-core</module>
         <module>connect-server-netty</module>
         <module>connect-server-smart-socket</module>
+        <module>spring-cloud-starter-needcoke-coke-connect</module>
     </modules>
 
 
     <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
         <lombok-version>1.18.20</lombok-version>
         <netty-version>4.1.70.Final</netty-version>
         <log4j2-version>2.15.0</log4j2-version>
@@ -31,7 +31,4 @@
         <spring-cloud-version>Hoxton.SR12</spring-cloud-version>
         <hutool-version>5.7.16</hutool-version>
     </properties>
-
-
-    
 </project>
