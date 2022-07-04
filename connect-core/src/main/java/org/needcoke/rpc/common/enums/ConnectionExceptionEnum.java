@@ -6,11 +6,11 @@ package org.needcoke.rpc.common.enums;
  * @author yanming
  * @date 2022/5/12
  */
-public enum ConnectionExceptionEnum {
+public enum ConnectionExceptionEnum implements EnumInterface{
     NO_SUCH_BEAN_NAME("0001", "no such bean name", "没有找到对应的beanName的bean"),
 
     BEAN_WITHOUT_METHOD("0002",
-                                "the bean name ${beanName} without method name ${method} ,you can use annotation @call or check method public.",
+                                "the bean name {} without method name {} ,you can use annotation @call or check method public.",
                                 "您请求的bean没有该方法,您可以考虑添加@call注解,或者修改method的访问权限为public。"),
 
     INVOKE_METHOD_ERROR("0003","invoke remote method error,please check the method name or param list ,if @Call ,you need to use @Call.value"
@@ -18,6 +18,15 @@ public enum ConnectionExceptionEnum {
 
     CAN_NOT_FIND_SUCH_INSTANCE("0004","can't find this instance.","找不到对应的实例"),
 
+    REMOTE_SERVICE_DOES_NOT_OPEN_THE_COKE_SERVICE_PORT("0005","remote service does not open the coke service port.","远程服务未开启coke服务端口"),
+
+    RECONNECTION_WITH_REMOTE_SERVICE_FAILED("0006","reconnection with remote service failed","与远程服务重建连接失败"),
+
+    CONNECTION_WITH_REMOTE_SERVICE_FAILED("0007","reconnection with remote service failed","与远程服务重建连接失败"),
+
+    THE_FORMAT_OF_THE_REMOTE_SERVICE_PORT_NUMBER_IS_INCORRECT_PLEASE_CHECK_THE_CONFIGURATION_OF_THE_REMOTE_SERVICE_PORT_NUMBER
+            ("0008","The format of the remote service port number is incorrect. Please check the configuration of the remote service port number",
+                    "远程服务端口号格式错误，请检查远程服务端口号配置")
     ;
     private final String code;
 

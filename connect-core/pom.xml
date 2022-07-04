@@ -22,42 +22,21 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <version>2.3.2.RELEASE</version>
         </dependency>
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-            <version>2.2.5.RELEASE</version>
-        </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok-version}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.5.3</version>
-        </dependency>
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.7.16</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.smartboot.http</groupId>
-            <artifactId>smart-http-client</artifactId>
-            <version>1.1.12</version>
         </dependency>
         <dependency>
             <groupId>com.ejlchina</groupId>
             <artifactId>okhttps-jackson</artifactId>
             <version>3.5.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
-            <version>2.2.5.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -69,10 +48,52 @@
             <artifactId>hutool-all</artifactId>
             <version>${hutool-version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.smartboot.socket</groupId>
             <artifactId>aio-core</artifactId>
             <version>1.5.17</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.3</version>
+        </dependency>
+        <dependency>
+            <groupId>net.dreamlu</groupId>
+            <artifactId>mica-auto</artifactId>
+            <version>2.3.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-commons</artifactId>
+            <version>2.2.5.RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>net.dreamlu</groupId>
+            <artifactId>mica-auto</artifactId>
+            <version>2.3.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.needcoke</groupId>
+            <artifactId>connect-link-tracking</artifactId>
+            <version>abandon</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.needcoke</groupId>
+            <artifactId>connect-fuse</artifactId>
+            <version>abandon</version>
         </dependency>
     </dependencies>
 
@@ -86,17 +107,6 @@
                 <version>2.3.2.RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope><!--引入三方依赖版本的设计-->
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>2.2.5.RELEASE</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.alibaba.cloud</groupId>
-                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>2.2.5.RELEASE</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

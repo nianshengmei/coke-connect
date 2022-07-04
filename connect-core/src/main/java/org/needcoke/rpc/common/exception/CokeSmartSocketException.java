@@ -2,8 +2,11 @@ package org.needcoke.rpc.common.exception;
 
 import lombok.Data;
 import org.needcoke.rpc.common.enums.ConnectionExceptionEnum;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Data
+@ResponseStatus(code = HttpStatus.BAD_GATEWAY)
 public class CokeSmartSocketException extends RuntimeException {
 
     private String errorCode;
