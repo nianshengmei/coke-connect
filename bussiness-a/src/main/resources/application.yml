@@ -7,14 +7,17 @@ spring:
     nacos:
       #注册中心
       discovery:
+        metadata:
+          coke-server-port: 13005
+#          rpcType: netty
+          rpcType: smart socket
         #server-addr: http://192.168.*:8848
         server-addr: http://127.0.0.1:8848
         cluster-name: 严鸣是吕诗文爸爸
         group: 相亲相爱一家人
-        access-key:
 server:
-  port: 8000
+  port: 8002
 
 coke:
-    server:
-      port: 13005
+  server:
+    port: 13005

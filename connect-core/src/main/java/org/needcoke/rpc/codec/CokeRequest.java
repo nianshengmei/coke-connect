@@ -5,7 +5,6 @@ import lombok.Getter;
 import org.needcoke.rpc.common.enums.ConnectRequestEnum;
 import org.needcoke.rpc.invoker.InvokeResult;
 
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,12 +22,17 @@ public class CokeRequest {
 
     private Map<String, Object> params;
 
-    private Map<String,String> headers;
+    private Map<String, String> headers;
+
+    private String cokeRequestId;
 
     @Getter
     private InvokeResult result;
 
-    private Integer requestId;
+    public CokeRequest setCokeRequestId(String cokeRequestId) {
+        this.cokeRequestId = cokeRequestId;
+        return this;
+    }
 
 
     public CokeRequest setRequestType(ConnectRequestEnum requestType) {
@@ -51,11 +55,11 @@ public class CokeRequest {
         return this;
     }
 
-    public CokeRequest addParam(String name,Object param) {
+    public CokeRequest addParam(String name, Object param) {
         if (null == params) {
             params = new HashMap<>();
         }
-        params.put(name,param);
+        params.put(name, param);
         return this;
     }
 
@@ -65,11 +69,15 @@ public class CokeRequest {
         return this;
     }
 
-    public CokeRequest addHeader(String name,String header) {
+    public String getHeader(String name) {
+        return this.headers.get(name);
+    }
+
+    public CokeRequest addHeader(String name, String header) {
         if (null == headers) {
             headers = new HashMap<>();
         }
-        headers.put(name,header);
+        headers.put(name, header);
         return this;
     }
 
@@ -78,13 +86,9 @@ public class CokeRequest {
         return this;
     }
 
-    public byte[] toBytes(){
+    public byte[] toBytes() {
         String jsonString = JSONObject.toJSONString(this);
         return jsonString.getBytes();
     }
 
-    public CokeRequest setRequestId(Integer requestId){
-        this.requestId = requestId;
-        return this;
-    }
 }

@@ -1,2 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-   org.needcoke.rpc.config.CokeConnectContextInitializer

@@ -5,6 +5,7 @@ import com.ejlchina.okhttps.HttpResult;
 import com.ejlchina.okhttps.SHttpTask;
 import com.ejlchina.okhttps.jackson.JacksonMsgConvertor;
 import lombok.extern.slf4j.Slf4j;
+import org.connect.rpc.link.tracking.util.TrackingUtil;
 import org.needcoke.rpc.common.constant.ConnectConstant;
 import org.needcoke.rpc.common.enums.HttpContentTypeEnum;
 import org.needcoke.rpc.invoker.ConnectInvoker;
@@ -14,15 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -72,20 +68,28 @@ public class ConnectUtil {
 
     public static final AtomicInteger requestIdMaker = new AtomicInteger();
 
-    public static final Map<Integer, InvokeResult> requestMap = new ConcurrentHashMap();
+    private static final Map<String, InvokeResult> requestMap = new ConcurrentHashMap();
 
     public static void putRequestMap(InvokeResult result){
-        requestMap.put(requestIdMaker.addAndGet(1),result);
+        requestMap.put(TrackingUtil.getRequestId(),result);
     }
 
-    public static ConcurrentHashMap<Integer,Thread> threadMap = new ConcurrentHashMap<>();
+    private static Map<String,Thread> threadMap = new ConcurrentHashMap<>();
 
-    public static void putRequestMap(Integer requestId,InvokeResult result){
+    public static void putRequestMap(String requestId,InvokeResult result){
         requestMap.put(requestId,result);
     }
 
-    public static InvokeResult getFromRequestMap(Integer key){
-        return requestMap.get(key);
+    public static InvokeResult getFromRequestMap(String key){
+        return requestMap.remove(key);
+    }
+
+    public static void putThreadMap(String requestId,Thread thread){
+        threadMap.put(requestId,thread);
+    }
+
+    public static Thread getFromThreadMap(String requestId){
+        return threadMap.remove(requestId);
     }
 
     /**
@@ -101,25 +105,7 @@ public class ConnectUtil {
                                  Map<String, Object> params) {
         List<ServiceInstance> instances = discoveryClient.getInstances(serviceId);
         ServiceInstance instance = loadBalance.choose(serviceId,instances);
-        InvokeResult result = connectInvoker.execute(instance, beanName, methodName, params);
+        InvokeResult result = connectInvoker.execute(null,instance, beanName, methodName, params);
         return result;
-    }
-
-
-    public static Integer getCokeServerPort(ServiceInstance instance){
-        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
-        HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
-        SHttpTask sHttpTask = HTTP.builder().addMsgConvertor(new JacksonMsgConvertor()).build()
-                .sync(instance.getUri() + ConnectConstant.COKE_PORT_RELATIVE_PATH)
-                .bodyType(HttpContentTypeEnum.JSON.getValue());
-        Enumeration<String> headerNames = request.getHeaderNames();
-        while (headerNames.hasMoreElements()) {
-            String nextElement = headerNames.nextElement();
-            String header = request.getHeader(nextElement);
-            sHttpTask.addHeader(nextElement,header);
-        }
-        HttpResult result = sHttpTask
-                .get();
-        return result.getBody().toBean(Integer.class);
     }
 }

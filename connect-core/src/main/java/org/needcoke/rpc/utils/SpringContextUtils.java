@@ -24,7 +24,6 @@ public class SpringContextUtils {
     @Resource
     private ApplicationContext context;
 
-
     @Resource(name = "beanNameMethodMap")
     private Map<String, Method> beanNameMethodMap;
 
