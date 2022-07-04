@@ -1,28 +1,100 @@
 # coke-connect
 
-#### 介绍
-基于spring cloud生态的跨服务rpc调用组件。支持eureka和nacos两种注册中心，支持负载均衡配置(默认轮询)。
+coke-connect是一款基于spring-cloud的方法级的跨服务调用工具。
 
-灵活的函数名称调用方式。
+coke-connect即提供了类open feign的client的调用方式，如下。
 
-#### 特点
-支持选配基于okHttps,smartSocket,netty作为跨服务调用的消息组件
+```java
+import org.needcoke.rpc.annotation.RpcClient;
 
-支持多种负载均衡策略
+@RpcClient(name = "cClient" , serviceId = "service-c" ,beanName = "c_bean")
+public interface ConClient {
 
-调用远程方法就像调用本地方法一样
-
-#### 展望
-
-@RpcClient注解的支持
-
-接口快速失败 ，失败重试 
-
-接口调用失败日志采集 ，链路追踪 ，实时分析修改注册中心中该节点的健康状态
-
-通过注册中心直接获取Rpc端口号（现在是从注册中心获取）{
-    step 1: 将rpc注解以metadata的方式存入注册中心，后续调用不需要调接口
-    step 2: 适配spring-boot-protocol，采用代理的方式统一端口
-    step 3: 覆盖主流tomcat 、undertow 、 jetty，增设拦截器，共享一个服务器
+    Object cTest2(String word);
 }
 
+@RestController
+@RequestMapping("api/b")
+@RequiredArgsConstructor
+public class TestController {
+
+    private final ConnectorFactory connectorFactory;
+
+    private final ConClient client;
+
+    @GetMapping("test")
+    public String test() {
+
+        return client.cTest2("hello");
+    }
+}
+
+```
+声明如上的一个connect client 即可实现调用服务类别为 service-c ,中的c_bean这个组件的  cTest2 方法
+
+更有灵活的函数调用方式，如下：
+```java
+class Main {
+    public static void main(String[] args) {
+        InvokeResult result = connectorFactory.connector("bussiness-c").execute("cCon", "cTest2", args);
+    }
+}
+
+
+
+public class InvokeResult implements Serializable {
+
+    /**
+     * 状态
+     */
+    private int status;
+
+    /**
+     * 响应时间
+     */
+    private long time;
+
+    /**
+     *  结果
+     */
+    private Object body;
+}
+
+```
+
+coke-connect除了提供了基本的rpc调用方式之外，还提供了负载均衡，链路追踪，熔断等策略。默认的调用方式基于http,更可选配netty 和 smart-socket
+
+```java
+
+class config{
+    
+    @Bean
+    public NettyInvoker nettyInvoker(){
+        return new NettyInvoker();
+    }
+
+    @Bean
+    public NettyServer nettyServer(){
+        return new NettyServer();
+    }
+
+//    @Bean
+//    public SmartSocketInvoker nettyInvoker(){
+//        return new SmartSocketInvoker();
+//    }
+//
+//    @Bean
+//    public SmartSocketServer nettyServer(){
+//        return new SmartSocketServer();
+//    }
+    
+    
+    //指定负载均衡策略    下面的例子是  响应时间决定权重 的负载均衡策略
+    @Bean
+    public WeightedResponseTimeBalance weightedResponseTimeBalance(){
+        return new WeightedResponseTimeBalance();
+    }
+    
+}
+
+```

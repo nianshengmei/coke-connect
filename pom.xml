@@ -9,6 +9,7 @@
     <packaging>pom</packaging>
     <version>abandon</version>
 
+    <url>https://gitee.com/needcoke/coke-connect</url>
     <description>abandon这个单词是词汇表的第一单词,coke-connect用于作为初始版本</description>
     <modules>
 
