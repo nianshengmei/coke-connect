@@ -38,6 +38,7 @@ public class Connector {
         return severPortMap.get(instance);
     }
 
+    //连接构造器 discoveryClient微服务客户端
     public Connector(String serviceId, DiscoveryClient discoveryClient, ConnectInvoker invoker, LoadBalance loadBalance) {
         this.serviceId = serviceId;
         this.discoveryClient = discoveryClient;
@@ -58,6 +59,7 @@ public class Connector {
                                 String methodName,
                                 Map<String, Object> params) {
         List<ServiceInstance> instances = discoveryClient.getInstances(serviceId);
+        //负载均衡选择
         ServiceInstance instance = loadBalance.choose(serviceId, instances);
         if (!requestTypeMap.containsKey(instance)) {
             Map<String, String> metadata = instance.getMetadata();

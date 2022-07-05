@@ -66,6 +66,7 @@ public class Fuse extends Thread {
             lock.lock();
             try {
                 if (unParkMap.containsKey(lockField)) {
+//                    park,unpark这两个方法都是LockSupport类名下的方法，park用来暂停线程，unpark用来将暂停的线程恢复。
                     LockSupport.unpark(unParkThread);
                     log.warn("coke connect fuse lockField = {},fuseTimeOut = {}", lockField, timeout);
                 }

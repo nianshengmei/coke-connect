@@ -30,7 +30,7 @@ public class TestController {
     @GetMapping("test")
     public InvokeResult test(){
         Map<String,Object> map = new HashMap<>();
-        map.put("word","刘勇是死废物");
+        map.put("word","12345");
         InvokeResult execute = connectorFactory.connector("bussiness-c").execute( "cCon", "cTest2", map);
         return execute;
     }

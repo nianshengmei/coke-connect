@@ -42,7 +42,8 @@ public class RpcController {
     public Object execute(@RequestParam String beanName,
                           @RequestParam String methodName,
                           @RequestBody Map<String, Object> params) {
-        log.info("execute http -- beanName : {} , methodName : {} , param : {} ,linkTracking = {}", beanName, methodName, JSONObject.toJSONString(params), TrackingUtil.linkTrackingJsonStr());
+        log.info("execute http -- beanName : {} , methodName : {} , param : {} ,linkTracking = {}",
+                beanName, methodName, JSONObject.toJSONString(params), TrackingUtil.linkTrackingJsonStr());
         Method method = SpringContextUtils.getMethod(beanName, methodName);
         if (null == method) {
             log.error(ConnectionExceptionEnum.BEAN_WITHOUT_METHOD.logStatement(ConnectConstant.EXECUTE_RELATIVE_PATH));

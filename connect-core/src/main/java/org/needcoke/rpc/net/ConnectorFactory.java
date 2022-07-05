@@ -38,6 +38,7 @@ public class ConnectorFactory {
     /**
      * 创建或者获取连接器
      */
+    //建立连接并记录
     public Connector connector(String serviceId){
         if (connectorMap.containsKey(serviceId)) {
             return connectorMap.get(serviceId);
