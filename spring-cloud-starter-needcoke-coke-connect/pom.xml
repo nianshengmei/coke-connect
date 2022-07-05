@@ -20,19 +20,16 @@
         <dependency>
             <groupId>org.needcoke</groupId>
             <artifactId>connect-core</artifactId>
-            <version>abandon</version>
         </dependency>
 
         <dependency>
             <groupId>org.needcoke</groupId>
             <artifactId>connect-server-smart-socket</artifactId>
-            <version>abandon</version>
         </dependency>
 
         <dependency>
             <groupId>org.needcoke</groupId>
             <artifactId>connect-server-netty</artifactId>
-            <version>abandon</version>
         </dependency>
     </dependencies>
 
