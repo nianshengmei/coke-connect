@@ -20,14 +20,12 @@
         <dependency>
             <groupId>org.needcoke</groupId>
             <artifactId>connect-core</artifactId>
-            <version>abandon</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.1.76.Final</version>
         </dependency>
     </dependencies>
 

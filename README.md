@@ -15,11 +15,9 @@ public interface ConClient {
 
 @RestController
 @RequestMapping("api/b")
-@RequiredArgsConstructor
 public class TestController {
 
-    private final ConnectorFactory connectorFactory;
-
+    @Resource
     private final ConClient client;
 
     @GetMapping("test")

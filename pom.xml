@@ -31,5 +31,147 @@
         <fastjson-version>1.2.38</fastjson-version>
         <spring-cloud-version>Hoxton.SR12</spring-cloud-version>
         <hutool-version>5.7.16</hutool-version>
+        <coke-connect-version>abandon</coke-connect-version>
+        <mica-auto-version>2.3.1</mica-auto-version>
+        <spring-cloud-commons-version>2.2.5.RELEASE</spring-cloud-commons-version>
+        <httpclient-version>4.5.3</httpclient-version>
+        <aio-core-version>1.5.17</aio-core-version>
+        <okhttps-version>3.5.1</okhttps-version>
+        <slf4j-version>1.7.16</slf4j-version>
+        <springframework.boot-version>2.3.2.RELEASE</springframework.boot-version>
+        <guava-version>31.0.1-jre</guava-version>
+        <transmittable-thread-local-version>2.12.1</transmittable-thread-local-version>
+        <gson-version>2.9.0</gson-version>
+        <netty-version>4.1.76.Final</netty-version>
+        <tomcat-embed-core-version>9.0.63</tomcat-embed-core-version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.needcoke</groupId>
+                <artifactId>connect-core</artifactId>
+                <version>${coke-connect-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.needcoke</groupId>
+                <artifactId>connect-fuse</artifactId>
+                <version>${coke-connect-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.needcoke</groupId>
+                <artifactId>connect-link-tracking</artifactId>
+                <version>${coke-connect-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.needcoke</groupId>
+                <artifactId>connect-server-netty</artifactId>
+                <version>${coke-connect-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.needcoke</groupId>
+                <artifactId>connect-server-smart-socket</artifactId>
+                <version>${coke-connect-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.needcoke</groupId>
+                <artifactId>spring-cloud-starter-needcoke-coke-connect</artifactId>
+                <version>${coke-connect-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.dreamlu</groupId>
+                <artifactId>mica-auto</artifactId>
+                <version>${mica-auto-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-commons</artifactId>
+                <version>${spring-cloud-commons-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.smartboot.socket</groupId>
+                <artifactId>aio-core</artifactId>
+                <version>${aio-core-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ejlchina</groupId>
+                <artifactId>okhttps-jackson</artifactId>
+                <version>${okhttps-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${springframework.boot-version}</version>
+            </dependency>
+
+            <!--微服务 版本依赖关系 (相互对应_官方)-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${springframework.boot-version}</version>
+                <type>pom</type>
+                <scope>import</scope><!--引入三方依赖版本的设计-->
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>transmittable-thread-local</artifactId>
+                <version>${transmittable-thread-local-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${gson-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>${netty-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-core</artifactId>
+                <version>${tomcat-embed-core-version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
