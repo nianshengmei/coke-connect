@@ -32,7 +32,7 @@ import java.util.*;
 /**
  * simple rpc 客户端扫描注册器
  *
- * @author Mr_wenpan@163.com 2022/1/19 2:11 下午
+ * @author warren
  */
 public class RpcClientRegister implements ImportBeanDefinitionRegistrar, ResourceLoaderAware, EnvironmentAware {
 
